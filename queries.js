@@ -1,20 +1,20 @@
 const Pool = require('pg').Pool
-// const pool = new Pool({
-//     user: 'ywkmgbsvxobffr',
-//     host: 'ec2-54-235-104-136.compute-1.amazonaws.com',
-//     database: 'dentflmojqec1u',
-//     password: 'b595f45d57c827a3d6f2425c8ae554f2e70dc7ff7ab1ae57114c7b10bc5821c3',
-//     port: 5432,
-//     ssl: true
-// })
-
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'test',
-    password: 'admin',
-    port: 5432
+    user: 'ywkmgbsvxobffr',
+    host: 'ec2-54-235-104-136.compute-1.amazonaws.com',
+    database: 'dentflmojqec1u',
+    password: 'b595f45d57c827a3d6f2425c8ae554f2e70dc7ff7ab1ae57114c7b10bc5821c3',
+    port: 5432,
+    ssl: true
 })
+
+// const pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'test',
+//     password: 'admin',
+//     port: 5432
+// })
 
 // COURSE
 const getCourse = (request, response) => {
@@ -23,7 +23,7 @@ const getCourse = (request, response) => {
         {
             throw error
         }
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -45,7 +45,7 @@ const getCourseById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -63,7 +63,7 @@ const getCourseById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -78,21 +78,46 @@ const getCourseById = (request, response) => {
 
 const createCourse = (request, response) => {
     const { course_id, course_name, course_desc, cl_id, cv_id, ul_id } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO course (course_id, course_name, course_desc, cl_id, cf_id, cv_id, ul_id) VALUES ($1, $2, $3, $4, $6, $7)', [course_id, course_name, course_desc, cl_id, cv_id, ul_id], (error, result) =>{
+    pool.query('SELECT * FROM course ORDER BY course_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "CR0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].course_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "CR" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO course (course_id, course_name, course_desc, cl_id, cf_id, cv_id, ul_id) VALUES ($1, $2, $3, $4, $6, $7)', [_currentid, course_name, course_desc, cl_id, cv_id, ul_id], (error, result) =>{
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Course added with ID: ${course_id}`)
+        response.status(201).send(`Course added with ID: ${_currentid}`)
+      })
     })
+
+
 }
 
 const updateCourse = (request, response) => {
     const course_id = request.params.id
     const {course_name} = request.body
-    
+
     pool.query('UPDATE course SET course_name = $1 WHERE course_id $2', [course_name, course_id], (error, result) =>{
         if(error)
         {
@@ -105,7 +130,7 @@ const updateCourse = (request, response) => {
 
 const deleteCourse = (request, response) => {
     const course_id = request.params.id
-    
+
     pool.query('DELETE FROM course WHERE course_id = $1', [course_id], (error, result) =>{
         if(error)
         {
@@ -123,7 +148,7 @@ const getCourseFile = (request, response) => {
         {
             throw error
         }
-       
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -145,7 +170,7 @@ const getCourseFileById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -163,7 +188,7 @@ const getCourseFileById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -179,14 +204,39 @@ const getCourseFileById = (request, response) => {
 const createCourseFile = (request, response) => {
     const { cf_id, cf_title, cf_data } = request.params.id
 
-    pool.query('INSERT INTO course_file (cf_id, cf_title, cf_data) VALUES ($1, $2, $3)', [cf_id, cf_title, cf_data], (error, result) => {
+    // INI YANG DIPASTE
+    var _currentid;
+
+    pool.query('SELECT * FROM course_file ORDER BY cf_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "CF0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].cf_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "CF" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+
+    pool.query('INSERT INTO course_file (cf_id, cf_title, cf_data) VALUES ($1, $2, $3)', [_currentid, cf_title, cf_data], (error, result) => {
         if (error)
         {
             throw error
         }
 
-        response.status(201).send(`Course File added with ID: ${cf_id}`)
+        response.status(201).send(`Course File added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateCourseFile = (request, response) => {
@@ -244,7 +294,7 @@ const getCourseLevelById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -262,7 +312,7 @@ const getCourseLevelById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -278,14 +328,39 @@ const getCourseLevelById = (request, response) => {
 const createCourseLevel = (request, response) => {
     const { cl_id, cl_name, cl_desc } = request.body
 
-    pool.query('INSERT INTO course_level (cl_id, cl_name, cl_desc) VALUES ($1, $2, $3)', [cl_id, cl_name, cl_desc], (error, result) => {
+    // INI YANG DIPASTE
+    var _currentid;
+
+    pool.query('SELECT * FROM course_level ORDER BY cl_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "CL0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].cl_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "CL" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+
+    pool.query('INSERT INTO course_level (cl_id, cl_name, cl_desc) VALUES ($1, $2, $3)', [_currentid, cl_name, cl_desc], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Course Level added with ID: ${cl_id}`)
+        response.status(201).send(`Course Level added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateCourseLevel = (request, response) => {
@@ -297,7 +372,7 @@ const updateCourseLevel = (request, response) => {
         {
             throw error
         }
-        
+
         response.status(200).send(`Course Level modified with ID: ${cl_id}`)
     })
 }
@@ -343,7 +418,7 @@ const getCourseVideoById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -361,7 +436,7 @@ const getCourseVideoById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -376,15 +451,38 @@ const getCourseVideoById = (request, response) => {
 
 const createCourseVideo = (request, response) => {
     const { cv_id, cv_title, cv_link } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO course_video (cv_id, cv_title, cv_link) VALUES ($1, $2, $3, $4)', [cv_id, cv_title, cv_link], (error, result) => {
+    pool.query('SELECT * FROM course_video ORDER BY cv_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "CV0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].cv_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "CV" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO course_video (cv_id, cv_title, cv_link) VALUES ($1, $2, $3, $4)', [_currentid, cv_title, cv_link], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Course Video added with ID: ${cv_id}`)
+        response.status(201).send(`Course Video added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateCourseVideo = (request, response) => {
@@ -403,7 +501,7 @@ const updateCourseVideo = (request, response) => {
 
 const deleteCourseVideo = (request, response) => {
     const cv_id = request.params.id
-    
+
     pool.query('DELETE FROM course_video WHERE cv_id = $1', [cv_id], (error, result) => {
         if(error)
         {
@@ -443,7 +541,7 @@ const getEventById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -461,7 +559,7 @@ const getEventById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -479,7 +577,7 @@ const getEventById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -494,15 +592,38 @@ const getEventById = (request, response) => {
 
 const createEvent = (request, response) => {
     const { event_id, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO (event_id, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [event_id, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img], (error, result) => {
+    pool.query('SELECT * FROM event ORDER BY event_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "EV0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].event_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "EV" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO event (event_id, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [_currentid, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Event added with ID: ${event_id}`)
+        response.status(201).send(`Event added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateEvent = (request, response) => {
@@ -564,7 +685,7 @@ const getEventTypeById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -582,7 +703,7 @@ const getEventTypeById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -597,15 +718,38 @@ const getEventTypeById = (request, response) => {
 
 const createEventType = (request, response) => {
     const { et_id, et_name, et_desc } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO event_type (et_id, et_name, et_desc) VALUES ($1, $2, $3)', [et_id, et_name, et_desc], (error, result) => {
+    pool.query('SELECT * FROM event_type ORDER BY et_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "ET0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].et_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "ET" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO event_type (et_id, et_name, et_desc) VALUES ($1, $2, $3)', [_currentid, et_name, et_desc], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Event Type added with ID: ${et_id}`)
+        response.status(201).send(`Event Type added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateEventType = (request, response) => {
@@ -662,7 +806,7 @@ const getInboxById = (request, response) => {
         {
             throw error
         }
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -676,14 +820,36 @@ const getInboxById = (request, response) => {
 
 const createInbox = (request, response) => {
     const { inbox_id, inbox_msg, inbox_datetime, user_id } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO inbox (inbox_id, inbox_msg, inbox_datetime, user_id) VALUES ($1, $2, $3, $4)', [inbox_id, inbox_msg, inbox_datetime, user_id], (error, result) => {
+    pool.query('SELECT * FROM inbox ORDER BY inbox_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "IN0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].inbox_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "IN" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO inbox (inbox_id, inbox_msg, inbox_datetime, user_id) VALUES ($1, $2, $3, $4)', [_currentid, inbox_msg, inbox_datetime, user_id], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Inbox added with ID: ${inbox_id}`)
+        response.status(201).send(`Inbox added with ID: ${_currentid}`)
     })
 }
 
@@ -722,7 +888,7 @@ const getNews = (request, response) => {
             throw error
         }
 
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -744,7 +910,7 @@ const getNewsById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -762,7 +928,7 @@ const getNewsById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -777,15 +943,38 @@ const getNewsById = (request, response) => {
 
 const createNews = (request, response) => {
     const { news_id, news_title, news_content, news_date } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO news (news_id, news_title, news_content, news_date) VALUES ($1, $2, $3, $4)', [news_id, news_title, news_content, news_date], (error, result) => {
+    pool.query('SELECT * FROM news ORDER BY news_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "NE0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].news_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "NE" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO news (news_id, news_title, news_content, news_date) VALUES ($1, $2, $3, $4)', [_currentid, news_title, news_content, news_date], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`News added with ID: ${news_id}`)
+        response.status(201).send(`News added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateNews = (request, response) => {
@@ -846,7 +1035,7 @@ const getNewsCategoryById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -864,7 +1053,7 @@ const getNewsCategoryById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -879,15 +1068,38 @@ const getNewsCategoryById = (request, response) => {
 
 const createNewsCategory = (request, response) => {
     const { nc_id, nc_name } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO news_category (nc_id, nc_name) VALUES ($1, $2)', [nc_id, nc_name], (error, result) => {
+    pool.query('SELECT * FROM news_category ORDER BY nc_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "NT0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].nc_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "NT" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO news_category (nc_id, nc_name) VALUES ($1, $2)', [_currentid, nc_name], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`News Category added with ID: ${nc_id}`)
+        response.status(201).send(`News Category added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateNewsCategory = (request, response) => {
@@ -924,7 +1136,7 @@ const getNewsComment = (request, response) => {
         {
             throw error
         }
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -946,7 +1158,7 @@ const getNewsCommentById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -964,7 +1176,7 @@ const getNewsCommentById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -979,15 +1191,38 @@ const getNewsCommentById = (request, response) => {
 
 const createNewsComment = (request, response) => {
     const { nc_id, nc_content, nc_date, news_id, user_id } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO news_comment (nc_id, nc_content, nc_date, news_id, user_id) VALUES ($1, $2, $3, $4, $5)', [nc_id, nc_content, nc_date, news_id, user_id], (error, result) => {
+    pool.query('SELECT * FROM news_comment ORDER BY nc_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "NM0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].nc_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "NM" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO news_comment (nc_id, nc_content, nc_date, news_id, user_id) VALUES ($1, $2, $3, $4, $5)', [_currentid, nc_content, nc_date, news_id, user_id], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`News Comment added with ID: ${nc_id}`)
+        response.status(201).send(`News Comment added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateNewsComment = (request, response) => {
@@ -1024,7 +1259,7 @@ const getTicket = (request, response) => {
         {
             throw error
         }
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -1064,7 +1299,7 @@ const getTicketById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1090,7 +1325,7 @@ const createTicket = (request, response) => {
         {
             var currentphase = result.rows[0].ticket_id;
             // console.log(currentphase);
-            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1; 
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
             // console.log(String(currentphase));
             // console.log(parseInt(currentphase.substring(2, 6))+1);
             // console.log(String(currentphase))
@@ -1110,7 +1345,7 @@ const createTicket = (request, response) => {
          })
     })
 
-   
+
 }
 
 const updateTicket = (request, response) => {
@@ -1172,7 +1407,7 @@ const getTicketClassById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1206,15 +1441,38 @@ const getTicketClassById = (request, response) => {
 
 const createTicketClass = (request, response) => {
     const { tc_id, tc_name } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO ticket_class (tc_id, tc_name) VALUES ($1, $2)', [tc_id, tc_name],(error, result) => {
+    pool.query('SELECT * FROM ticket_class ORDER BY tc_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "TC0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].tc_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "TC" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO ticket_class (tc_id, tc_name) VALUES ($1, $2)', [_currentid, tc_name],(error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`Course Class added with ID: ${tc_id}`)
+        response.status(201).send(`Course Class added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateTicketClass = (request, response) => {
@@ -1266,7 +1524,7 @@ const getTicketUserById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1284,7 +1542,7 @@ const getTicketUserById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1299,7 +1557,7 @@ const getTicketUserById = (request, response) => {
 
 const createTicketUser = (request, response) => {
     const { user_id, ticket_id } = request.body
-
+    // tidak generate id karena kedua isinya foreign key yg nunjuk ke masing-masing table yang diunjuk
     pool.query('INSERT INTO ticket_user (user_id, ticket_id) VALUES ($1, $2)', [user_id, ticket_id], (error, result) => {
         if(error)
         {
@@ -1367,7 +1625,7 @@ const getUserBusinessById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1385,7 +1643,7 @@ const getUserBusinessById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1403,7 +1661,7 @@ const getUserBusinessById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1418,15 +1676,38 @@ const getUserBusinessById = (request, response) => {
 
 const createUserBusiness = (request, response) => {
     const { ub_id, ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio } = request.body
+    // INI YANG DIPASTE
+    var _currentid;
 
-    pool.query('INSERT INTO user_business (ub_id, ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio) VALUES ($1, $2, $3, $4, $5, $6)', [ub_id, ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio], (error, result) => {
+    pool.query('SELECT * FROM user_business ORDER BY ub_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "UB0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].ub_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "UB" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO user_business (ub_id, ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio) VALUES ($1, $2, $3, $4, $5, $6)', [_currentid, ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`User Business added with ID: ${ub_id}`)
+        response.status(201).send(`User Business added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateUserBusiness = (request, response) => {
@@ -1463,7 +1744,7 @@ const getUserLevel = (request, response) => {
         {
             throw error
         }
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -1485,7 +1766,7 @@ const getUserLevelById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1503,7 +1784,7 @@ const getUserLevelById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1518,15 +1799,38 @@ const getUserLevelById = (request, response) => {
 
 const createUserLevel = (request, response) => {
     const { ul_id, ul_name } = request.body
-    
-    pool.query('INSERT INTO user_level (ul_id, ul_name) VALUES ($1, $2)', [ul_id, ul_name], (error, result) => {
+    // INI YANG DIPASTE
+    var _currentid;
+
+    pool.query('SELECT * FROM user_level ORDER BY ul_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "UL0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].ul_id;
+            // console.log(currentphase);
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            // console.log(String(currentphase));
+            // console.log(parseInt(currentphase.substring(2, 6))+1);
+            // console.log(String(currentphase))
+            // console.log(currentnumber);
+            _currentid = "UL" + String(currentnumber).padStart(4, '0');
+            // console.log(_currentid);
+            // console.log('---LIMIT---');
+        }
+
+    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+    pool.query('INSERT INTO user_level (ul_id, ul_name) VALUES ($1, $2)', [_currentid, ul_name], (error, result) => {
         if(error)
         {
             throw error
         }
 
-        response.status(201).send(`User Level added with ID: ${ul_id}`)
+        response.status(201).send(`User Level added with ID: ${_currentid}`)
     })
+  })
 }
 
 const updateUserLevel = (request, response) => {
@@ -1563,7 +1867,7 @@ const getUsers = (request, response) => {
         {
             throw error
         }
-        
+
         if (results.rowCount == 0)
         {
             response.status(200).json({message: 'No Data Found'})
@@ -1585,7 +1889,7 @@ const getUsersById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1595,16 +1899,16 @@ const getUsersById = (request, response) => {
                 response.status(200).json(results.rows)
             }
         })
-    } 
+    }
     else if (_order == 2) //query by username
     {
-        pool.query('SELECT * FROM users WHERE user_username LIKE %$1%', [_qparam], 
+        pool.query('SELECT * FROM users WHERE user_username LIKE %$1%', [_qparam],
         (error, results) => {
             if(error)
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1622,7 +1926,7 @@ const getUsersById = (request, response) => {
             {
                 throw error
             }
-            
+
             if (results.rowCount == 0)
             {
                 response.status(200).json({message: 'No Data Found'})
@@ -1637,8 +1941,30 @@ const getUsersById = (request, response) => {
 
 const createUsers = (request, response) => {
    const { user_id, user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password } = request.body
+   // INI YANG DIPASTE
+   var _currentid;
 
-   pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7, $8, $9, $10)', [user_id, user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password], (error, result) => {
+   pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (error, result) => {
+       if(result.rowCount == 0)
+       {
+           _currentid = "US0001";
+       }
+       else
+       {
+           var currentphase = result.rows[0].user_id;
+           // console.log(currentphase);
+           var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+           // console.log(String(currentphase));
+           // console.log(parseInt(currentphase.substring(2, 6))+1);
+           // console.log(String(currentphase))
+           // console.log(currentnumber);
+           _currentid = "US" + String(currentnumber).padStart(4, '0');
+           // console.log(_currentid);
+           // console.log('---LIMIT---');
+       }
+
+   // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
+   pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7, $8, $9, $10)', [_currentid, user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password], (error, result) => {
        if(error)
        {
            throw error
@@ -1649,6 +1975,7 @@ const createUsers = (request, response) => {
        }
 
    })
+ })
 }
 
 const updateUsers = (request, response) => {
@@ -1702,7 +2029,7 @@ const checkUser = (request, response) => {
 module.exports =
 {
     // COURSE
-    getCourse, 
+    getCourse,
     getCourseById,
     createCourse,
     updateCourse,
