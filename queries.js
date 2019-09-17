@@ -850,6 +850,7 @@ const createInbox = (request, response) => {
         }
 
         response.status(201).send(`Inbox added with ID: ${_currentid}`)
+        })
     })
 }
 
@@ -1344,8 +1345,6 @@ const createTicket = (request, response) => {
             response.status(201).send(`Ticket added with ID: ${_currentid}`)
          })
     })
-
-
 }
 
 const updateTicket = (request, response) => {
