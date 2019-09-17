@@ -36,8 +36,7 @@ const getCourse = (request, response) => {
 }
 
 const getCourseById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -137,8 +136,7 @@ const getCourseFile = (request, response) => {
 }
 
 const getCourseFileById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -237,8 +235,7 @@ const getCourseLevel = (request, response) => {
 }
 
 const getCourseLevelById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -337,8 +334,7 @@ const getCourseVideo = (request, response) => {
 }
 
 const getCourseVideoById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -438,8 +434,7 @@ const getEvent = (request, response) => {
 }
 
 const getEventById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if(_order == 1) //query by name
     {
@@ -560,8 +555,7 @@ const getEventType = (request, response) => {
 }
 
 const getEventTypeById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -741,8 +735,7 @@ const getNews = (request, response) => {
 }
 
 const getNewsById = (request, response) => {
-    const _order = request.params.id 
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -844,8 +837,7 @@ const getNewsCategory = (request, response) => {
 }
 
 const getNewsCategoryById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam }= request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -945,8 +937,7 @@ const getNewsComment = (request, response) => {
 }
 
 const getNewsCommentById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //order by name
     {
@@ -1050,20 +1041,20 @@ const getTicketById = (request, response) => {
 
     if (_order == 1) //query by name
     {
-        pool.query('SELECT * FROM ticket WHERE ticket_name LIKE $1', [_qparam], (error, results) => {
-                if(error)
-                {
-                    throw error
-                }
-                
-                if (results.rowCount == 0)
-                {
-                    response.status(200).json({message: 'No Data Found'})
-                }
-                else
-                {
-                    response.status(200).json(results.rows)
-                }
+        pool.query('SELECT * FROM ticket WHERE ticket_name LIKE %$1%', [_qparam], (error, results) => {
+            if(error)
+            {
+                throw error
+            }
+            
+            if (results.rowCount == 0)
+            {
+                response.status(200).json({message: 'No Data Found'})
+            }
+            else
+            {
+                response.status(200).json(results.rows)
+            }
         })
     }
     else if (_order == 2) // query by id
@@ -1172,8 +1163,7 @@ const getTicketClass = (request, response) => {
 }
 
 const getTicketClassById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -1267,8 +1257,7 @@ const getTicketUser = (request, response) => {
 }
 
 const getTicketUserById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
     
     if (_order == 1) //query by user_id
     {
@@ -1369,8 +1358,7 @@ const getUserBusiness = (request, response) => {
 }
 
 const getUserBusinessById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -1488,8 +1476,7 @@ const getUserLevel = (request, response) => {
 }
 
 const getUserLevelById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if (_order == 1) //query by name
     {
@@ -1589,8 +1576,7 @@ const getUsers = (request, response) => {
 }
 
 const getUsersById = (request, response) => {
-    const _order = request.params.id
-    const { _qparam } = request.body
+    const { _order, _qparam } = request.body
 
     if(_order == 1) //query by email
     {
