@@ -131,7 +131,7 @@ const accountScene = (request, response) => {
 //homeScene
 const homeScene = (request, response) => {
     //event sort latest by date.
-    pool.query('SELECT * FROM event ORDER BY event_date DESC LIMIT BY 3', (err, res) => {
+    pool.query('SELECT * FROM event ORDER BY event_date DESC LIMIT 3', (err, res) => {
         if(err) return response.status(500).send('Server error!');
         if(!res)
         {
