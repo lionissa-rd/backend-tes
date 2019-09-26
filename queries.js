@@ -114,8 +114,8 @@ const login = (request, response) => {
 // myAccountScene
 const accountScene = (request, response) => {
     //getUser
-    console.log(middleware.checkToken.decoded);
-    pool.query('SELECT * FROM users WHERE user_id = $1', [middleware.decoded.id], (err, res) => {
+    console.log(request.id);
+    pool.query('SELECT * FROM users WHERE user_id = $1', [request.id], (err, res) => {
         if (err) return response.status(500).send('Server error!');
         if (!response) 
         {
