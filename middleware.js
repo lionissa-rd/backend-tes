@@ -24,7 +24,6 @@ let checkToken = (req, res, next) => {
                 console.log("Tokennya benar")
                 req.decoded = decoded;
                 req.id = decoded.id;
-                // decoded = req.decoded;
                 console.log(decoded);
                 console.log(decoded.id);
                 next();

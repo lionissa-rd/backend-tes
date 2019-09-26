@@ -115,7 +115,7 @@ const login = (request, response) => {
 const accountScene = (request, response) => {
     //getUser
     console.log(request.id);
-    pool.query('SELECT * FROM users WHERE user_id = $1', [request.id], (err, res) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_id = $1', [request.id], (err, res) => {
         if (err) return response.status(500).send('Server error!');
         if (!response) 
         {
