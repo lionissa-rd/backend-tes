@@ -16,6 +16,7 @@ app.use(
 
 app.post('/register', db.register);
 app.post('/login', db.login);
+app.get('/accountscene', middleware.checkToken, db.accountScene);
 app.get('/', middleware.checkToken);
 // app.get('/', (request, response) => {
 //     response.json({info: 'Node.js, Express, and Postgres API'})

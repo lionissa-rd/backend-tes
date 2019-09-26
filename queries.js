@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const config = require('./config')
+const middleware = require('./middleware')
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'znzlkwbarqxmos',
@@ -112,7 +113,19 @@ const login = (request, response) => {
 
 // myAccountScene
 const accountScene = (request, response) => {
-    
+    //getUser
+    console.log(middleware.checkToken.decoded);
+    pool.query('SELECT * FROM users WHERE user_id = $1', [middleware.decoded.id], (err, res) => {
+        if (err) return response.status(500).send('Server error!');
+        if (!response) 
+        {
+            return response.status(404).send('User not found!');
+        }
+        else
+        {
+            return response.status(200).json(res.rows)
+        } 
+    });
 }
 
 // COURSE
@@ -2155,6 +2168,7 @@ module.exports =
 {
     register,
     login,
+    accountScene,
     // COURSE
     getCourse,
     getCourseById,

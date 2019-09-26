@@ -23,7 +23,9 @@ let checkToken = (req, res, next) => {
             else {
                 console.log("Tokennya benar")
                 req.decoded = decoded;
+                decoded = req.decoded;
                 console.log(decoded);
+                console.log(decoded.id);
                 next();
             }
         })
@@ -39,5 +41,5 @@ let checkToken = (req, res, next) => {
 };
 
 module.exports = {
-    checkToken : checkToken
+    checkToken : checkToken,
 }
