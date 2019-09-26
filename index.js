@@ -2,18 +2,24 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
+const config = require('./config')
+const middleware = require('./middleware')
 const port = 3001
+const router = express.Router();
 
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
-    extended: true,
+    extended: false,
   })
 )
 
-app.get('/', (request, response) => {
-    response.json({info: 'Node.js, Express, and Postgres API'})
-})
+app.post('/register', db.register);
+app.post('/login', db.login);
+app.get('/', middleware.checkToken);
+// app.get('/', (request, response) => {
+//     response.json({info: 'Node.js, Express, and Postgres API'})
+// })
 
 // // COURSE
 // app.get('/course/data', db.getCourse)
@@ -87,7 +93,9 @@ app.get('/', (request, response) => {
 
 // TICKET
 app.get('/ticket/data', db.getTicket)
-app.post('/ticket/data', db.getTicketById)
+//app.post('/ticket/data', db.getTicketById)
+app.get('/ticket/data/:id', db.getTicketById)
+app.get('/ticket/data/:name', db.getTicketByName)
 app.post('/ticket/create', db.createTicket)
 app.put('/ticket/update/:id', db.updateTicket)
 app.delete('/ticket/delete/:id', db.deleteTicket)
@@ -126,15 +134,6 @@ app.post('/users/data', db.getUsersById)
 app.post('/users/create', db.createUsers)
 app.put('/users/update/:id', db.updateUsers)
 app.delete('/users/delete/:id', db.deleteUsers)
-
-// LOGIN
-app.post('/login', (req, res) => {
-  res.status(200).send({ access_token: '' });
-})
-
-app.post('/register', (req, res) => {
-  res.status(200).send({ access_token: '' });
-})
 
 app.listen(port, () => {
     console.log(

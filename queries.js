@@ -1,20 +1,113 @@
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const config = require('./config')
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'ywkmgbsvxobffr',
-    host: 'ec2-54-235-104-136.compute-1.amazonaws.com',
-    database: 'dentflmojqec1u',
-    password: 'b595f45d57c827a3d6f2425c8ae554f2e70dc7ff7ab1ae57114c7b10bc5821c3',
+    user: 'znzlkwbarqxmos',
+    host: 'ec2-54-243-243-76.compute-1.amazonaws.com',
+    database: 'dfe6td2dpbumh4',
+    password: 'af356e2a40618caee183fca772a997cf9392882c2ed9d161162ae7d4bf893d17',
     port: 5432,
     ssl: true
 })
+//const SECRET_KEY = "tematiktes1004"
 
-// const pool = new Pool({
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'test',
-//     password: 'admin',
-//     port: 5432
-// })
+const register = (request, response) => {
+    const email = request.body.userEmail
+    const password = bcrypt.hashSync(String(request.body.userPassword))
+    const first_name = request.body.userFirstName
+    const last_name = request.body.userLastName
+
+    pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (err, res) => {
+        if (err) {
+            console.log("error")
+            console.log(res)
+        }
+
+        if (res.rowCount == 0) {
+            _currentid = "US0001";
+        }
+        else {
+            var currentphase = res.rows[0].user_id;
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            _currentid = "US" + String(currentnumber).padStart(4, '0');
+        }
+        console.log(_currentid);
+
+        pool.query('INSERT INTO users (user_id, user_email, user_password, user_creation_date, user_first_name, user_last_name) VALUES ($1, $2, $3, NOW(), $4, $5)', [_currentid, email, password, first_name, last_name], (err, res) => {
+            if (err) return res.status(500).send("Server error!")
+
+            pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
+                console.log("Abis select");
+                if (err) return res.status(500).send("Server error!");
+                console.log("status 500");
+                const expiresIn = 24 * 60 * 60;
+                console.log("Abis 24 x 60 x60");
+                const accessToken = jwt.sign({ id: _currentid }, config.secret, {
+                    expiresIn: expiresIn
+                });
+                console.log("Abis access token");
+            });
+        });
+
+        response.status(200).send("Success!")
+    });
+
+    // pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (err, res) => {
+    //     if (err) {
+    //         console.log("error")
+    //         console.log(res)
+    //     }
+
+    //     if (res.rowCount == 0) {
+    //         _currentid = "US0001";
+    //     }
+    //     else {
+    //         var currentphase = res.rows[0].user_id;
+    //         var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+    //         _currentid = "US" + String(currentnumber).padStart(4, '0');
+    //     }
+    //     console.log(_currentid);
+
+    //     pool.query('INSERT INTO users (user_id, user_email, user_password, user_creation_date, user_first_name, user_last_name) VALUES ($1, $2, $3, NOW(), $4, $5)', [_currentid, email, password, first_name, last_name], (err, res) => {
+    //         if (err) return res.status(500).send("Server error!")
+
+    //         pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
+    //             console.log("Abis select");
+    //             if (err) return res.status(500).send("Server error!");
+    //             console.log("status 500");
+    //             const expiresIn = 24 * 60 * 60;
+    //             console.log("Abis 24 x 60 x60");
+    //             const accessToken = jwt.sign({ id: _currentid }, config.secret, {
+    //                 expiresIn: expiresIn
+    //             });
+    //             console.log("Abis access token");
+    //         });
+    //     });
+
+    //     response.status(200).send('success')
+    // });
+}
+
+const login = (request, response) => {
+    const email = request.body.userEmail
+    const password = bcrypt.hashSync(String(request.body.userPassword))
+
+        pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
+            if (err) return  response.status(500).send('Server error!');
+            if (!res) return  response.status(404).send('User not found!');
+            
+            //console.log(res.rows[0].user_password)
+            const  result  =  bcrypt.compare(password, String(res.rows[0].user_password));
+            if(!result) return  response.status(401).send('Password not valid!');
+    
+            const  expiresIn  =  24  *  60  *  60;
+            const  accessToken  =  jwt.sign({ id:  res.user_id }, config.secret, {
+                expiresIn:  expiresIn
+            });
+            response.status(200).send({ "user":  res.user_id, "access_token":  accessToken, "expires_in":  expiresIn});
+        });
+}
 
 // COURSE
 const getCourse = (request, response) => {
@@ -1273,44 +1366,43 @@ const getTicket = (request, response) => {
 }
 
 const getTicketById = (request, response) => {
-    const { _order, _qparam } = request.body
+    const ticket_id = request.params.id
 
-    if (_order == 1) //query by name
-    {
-        pool.query('SELECT * FROM ticket WHERE ticket_name LIKE %$1%', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
-            
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-    else if (_order == 2) // query by id
-    {
-        pool.query('SELECT * FROM ticket WHERE ticket_id = $1', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+    pool.query('SELECT * FROM ticket WHERE ticket_id = $1', [ticket_id], (error, result) => {
+        if (error)
+        {
+            throw error
+        }
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
+        if (result.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
+}
+
+const getTicketByName = (request, response) => {
+    const ticket_name = request.params.id
+
+    pool.query('SELECT * FROM ticket WHERE ticket_name = $1', [ticket_name], (error, result) => {
+        if(error)
+        {
+            throw error
+        }
+
+        if(result.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
 }
 
 const createTicket = (request, response) => {
@@ -1397,45 +1489,43 @@ const getTicketClass = (request, response) => {
 }
 
 const getTicketClassById = (request, response) => {
-    const { _order, _qparam } = request.body
+    const tc_id = request.params.id
 
-    if (_order == 1) //query by name
-    {
-        pool.query('SELECT * FROM ticket_class WHERE tc_name LIKE %$1%', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+    pool.query('SELECT * FROM ticket WHERE tc_id = $1', [tc_id], (error, result) => {
+        if (error)
+        {
+            throw error
+        }
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
+        if (result.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
+}
 
-        })
-    }
-    else if (_order == 2) //query by id
-    {
-        pool.query('SELECT * FROM ticket_class WHERE tc_id = $1', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+const getTicketClassByName = (request, response) => {
+    const tc_name = request.params.id
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
+    pool.query('SELECT * FROM ticket_class WHERE tc_name LIKE %$1%', [tc_name], (error, result) => {
+        if(error)
+        {
+            throw error
+        }
+
+        if(result.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
 }
 
 const createTicketClass = (request, response) => {
@@ -1883,7 +1973,7 @@ const getUsersById = (request, response) => {
 
     if(_order == 1) //query by email
     {
-        pool.query('SELECT * FROM users WHERE user_email LIKE %$1%', [_qparam], (error, results) => {
+        pool.query('SELECT * FROM users WHERE user_email LIKE $1', [_qparam], (error, results) => {
             if(error)
             {
                 throw error
@@ -1977,6 +2067,36 @@ const createUsers = (request, response) => {
  })
 }
 
+const createUsers2 = (request, response) => {
+    const {user_email, user_fullname, user_password} = request.body
+    var _currentid;
+
+    pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (error, result) => {
+        if(result.rowCount == 0)
+        {
+            _currentid = "US0001";
+        }
+        else
+        {
+            var currentphase = result.rows[0].user_id;
+            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+            _currentid = "US" + String(currentnumber).padStart(4, '0');
+        }
+
+        pool.query('INSERT INTO users (user_id, user_email, user_fullname, user_password, user_creation_date) VALUES ($1, $2, $3, $4, NOW())', [_currentid, user_email, user_fullname, user_password],(error, result) => {
+            if(error)
+            {
+                throw error
+            }
+            else
+            {
+                response.status(200).json({message: 'User sucessfully inserted'})
+            }
+     
+        })
+    })
+}
+
 const updateUsers = (request, response) => {
     const user_id = request.params.id
     const {user_email} = request.body
@@ -2027,6 +2147,8 @@ const checkUser = (request, response) => {
 
 module.exports =
 {
+    register,
+    login,
     // COURSE
     getCourse,
     getCourseById,
@@ -2090,6 +2212,7 @@ module.exports =
     // TICKET
     getTicket,
     getTicketById,
+    getTicketByName,
     createTicket,
     updateTicket,
     deleteTicket,
@@ -2121,6 +2244,7 @@ module.exports =
     getUsers,
     getUsersById,
     createUsers,
+    createUsers2,
     updateUsers,
     deleteUsers,
     //LOGIN
