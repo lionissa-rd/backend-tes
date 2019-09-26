@@ -12,6 +12,7 @@ const pool = new Pool({
 })
 //const SECRET_KEY = "tematiktes1004"
 
+// REGISTER
 const register = (request, response) => {
     const email = request.body.userEmail
     const password = bcrypt.hashSync(String(request.body.userPassword))
@@ -47,10 +48,9 @@ const register = (request, response) => {
                     expiresIn: expiresIn
                 });
                 console.log("Abis access token");
+                response.status(200).send({"auth": true, "token": accessToken})
             });
         });
-
-        response.status(200).send("Success!")
     });
 
     // pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (err, res) => {
@@ -89,6 +89,7 @@ const register = (request, response) => {
     // });
 }
 
+// LOGIN
 const login = (request, response) => {
     const email = request.body.userEmail
     const password = bcrypt.hashSync(String(request.body.userPassword))
@@ -102,11 +103,16 @@ const login = (request, response) => {
             if(!result) return  response.status(401).send('Password not valid!');
     
             const  expiresIn  =  24  *  60  *  60;
-            const  accessToken  =  jwt.sign({ id:  res.user_id }, config.secret, {
+            const  accessToken  =  jwt.sign({ id:  res.rows[0].user_id }, config.secret, {
                 expiresIn:  expiresIn
             });
-            response.status(200).send({ "user":  res.user_id, "access_token":  accessToken, "expires_in":  expiresIn});
+            response.status(200).send({ "user":  res.rows[0].user_id, "access_token":  accessToken, "expires_in":  expiresIn});
         });
+}
+
+// myAccountScene
+const accountScene = (request, response) => {
+    
 }
 
 // COURSE
