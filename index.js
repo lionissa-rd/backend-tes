@@ -14,11 +14,18 @@ app.use(
   })
 )
 
+// REGISTER
 app.post('/register', db.register);
+// LOGIN
 app.post('/login', db.login);
+// ACCOUNTSCENE
 app.get('/accountscene', middleware.checkToken, db.accountScene);
+// HOMESCENE
 app.get('/homescene', middleware.checkToken, db.homeScene);
+// INDEX
 app.get('/', middleware.checkToken);
+
+
 // app.get('/', (request, response) => {
 //     response.json({info: 'Node.js, Express, and Postgres API'})
 // })
@@ -109,30 +116,27 @@ app.post('/ticketclass/create', db.createTicketClass)
 app.put('/ticketclass/update/:id', db.updateTicketClass)
 app.delete('/ticketclass/delete/:id', db.deleteTicketClass)
 
-// //TICKET_USER
-// app.get('/ticketuser/data', db.getTicketUser)
-// app.post('/ticketuser/data', db.getTicketUserById)
-// app.post('/ticketuser/create', db.createTicketUser)
-// app.put('/ticketuser/update/:id', db.updateTicketUser)
-// app.delete('/ticketuser/delete/:id', db.deleteTicketUser)
-
 // // USER_BUSINESS
 // app.get('/userbusiness/data', db.getUserBusiness)
-// app.post('/userbusiness/data', db.getUserBusinessById)
+// app.get('/userbusiness/data/:id', db.getUserBusinessByName)
+// app.get('/userbusiness/data/:id), db.getUserBusinessByBusiness)
 // app.post('/userbusiness/create', db.createUserBusiness)
 // app.put('/userbusiness/update/:id', db.updateUserBusiness)
 // app.delete('/userbusiness/delete/:id', db.deleteUserBusiness)
 
-// USER_LEVEL
-app.get('/userlevel/data', db.getUserLevel)
-app.post('/userlevel/data', db.getUserLevelById)
-app.post('/userlevel/create', db.createUserLevel)
-app.put('/userlevel/update/:id', db.updateUserLevel)
-app.delete('/userlevel/delete/:id', db.deleteUserLevel)
+// // USER_LEVEL
+// app.get('/userlevel/data', db.getUserLevel)
+// app.post('/userlevel/data', db.getUserLevelById)
+// app.post('/userlevel/create', db.createUserLevel)
+// app.put('/userlevel/update/:id', db.updateUserLevel)
+// app.delete('/userlevel/delete/:id', db.deleteUserLevel)
 
 // USERS
 app.get('/users/data', db.getUsers)
-app.post('/users/data', db.getUsersById)
+app.get('/users/data/:id', db.getUsersByEmail)
+app.get('/users/data/:id', db.getUsersByUsername)
+app.get('/users/data/:id', db.getUsersByFirstName)
+app.get('/users/data/:id', db.getUsersByLastName)
 app.post('/users/create', db.createUsers)
 app.put('/users/update/:id', db.updateUsers)
 app.delete('/users/delete/:id', db.deleteUsers)

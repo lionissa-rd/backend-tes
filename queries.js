@@ -11,7 +11,6 @@ const pool = new Pool({
     port: 5432,
     ssl: true
 })
-//const SECRET_KEY = "tematiktes1004"
 
 // REGISTER
 const register = (request, response) => {
@@ -53,41 +52,6 @@ const register = (request, response) => {
             });
         });
     });
-
-    // pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (err, res) => {
-    //     if (err) {
-    //         console.log("error")
-    //         console.log(res)
-    //     }
-
-    //     if (res.rowCount == 0) {
-    //         _currentid = "US0001";
-    //     }
-    //     else {
-    //         var currentphase = res.rows[0].user_id;
-    //         var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-    //         _currentid = "US" + String(currentnumber).padStart(4, '0');
-    //     }
-    //     console.log(_currentid);
-
-    //     pool.query('INSERT INTO users (user_id, user_email, user_password, user_creation_date, user_first_name, user_last_name) VALUES ($1, $2, $3, NOW(), $4, $5)', [_currentid, email, password, first_name, last_name], (err, res) => {
-    //         if (err) return res.status(500).send("Server error!")
-
-    //         pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
-    //             console.log("Abis select");
-    //             if (err) return res.status(500).send("Server error!");
-    //             console.log("status 500");
-    //             const expiresIn = 24 * 60 * 60;
-    //             console.log("Abis 24 x 60 x60");
-    //             const accessToken = jwt.sign({ id: _currentid }, config.secret, {
-    //                 expiresIn: expiresIn
-    //             });
-    //             console.log("Abis access token");
-    //         });
-    //     });
-
-    //     response.status(200).send('success')
-    // });
 }
 
 // LOGIN
@@ -229,15 +193,8 @@ const createCourse = (request, response) => {
         else
         {
             var currentphase = result.rows[0].course_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "CR" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -355,15 +312,8 @@ const createCourseFile = (request, response) => {
         else
         {
             var currentphase = result.rows[0].cf_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "CF" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -479,15 +429,8 @@ const createCourseLevel = (request, response) => {
         else
         {
             var currentphase = result.rows[0].cl_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "CL" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -602,15 +545,8 @@ const createCourseVideo = (request, response) => {
         else
         {
             var currentphase = result.rows[0].cv_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "CV" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -743,15 +679,8 @@ const createEvent = (request, response) => {
         else
         {
             var currentphase = result.rows[0].event_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "EV" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -869,15 +798,8 @@ const createEventType = (request, response) => {
         else
         {
             var currentphase = result.rows[0].et_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "ET" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -971,15 +893,8 @@ const createInbox = (request, response) => {
         else
         {
             var currentphase = result.rows[0].inbox_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "IN" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -1095,15 +1010,8 @@ const createNews = (request, response) => {
         else
         {
             var currentphase = result.rows[0].news_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "NE" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -1220,15 +1128,8 @@ const createNewsCategory = (request, response) => {
         else
         {
             var currentphase = result.rows[0].nc_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "NT" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -1343,15 +1244,8 @@ const createNewsComment = (request, response) => {
         else
         {
             var currentphase = result.rows[0].nc_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "NM" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -1464,15 +1358,8 @@ const createTicket = (request, response) => {
         else
         {
             var currentphase = result.rows[0].ticket_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "TI" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
         pool.query('INSERT INTO ticket (ticket_id, ticket_name, ticket_date, tc_id) VALUES ($1, $2, NOW(), $3)', [_currentid, ticket_name, tc_id], (error, result) => {
@@ -1588,15 +1475,8 @@ const createTicketClass = (request, response) => {
         else
         {
             var currentphase = result.rows[0].tc_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "TC" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -1751,63 +1631,44 @@ const getUserBusiness = (request, response) => {
     })
 }
 
-const getUserBusinessById = (request, response) => {
-    const { _order, _qparam } = request.body
+const getUserBusinessByName = (request, response) => {
+    const _qparam = request.params.id
 
-    if (_order == 1) //query by name
-    {
-        pool.query('SELECT * FROM user_business WHERE ub_name LIKE $%1$', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+    pool.query('SELECT * FROM user_business WHERE ub_name = $1', [_qparam], (error, results) => {
+        if(error)
+        {
+            throw error
+        }
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-    else if (_order == 2) //query by industry category
-    {
-        pool.query('SELECT * FROM user_business WHERE ub_industry LIKE %$1%', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+        if (results.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
+}
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-    else if (_order == 3) //query by id
-    {
-        pool.query('SELECT * FROM user_business WHERE ub_id = $1', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+const getUserBusinessByIndustry = (request, response) => {
+    const _qparam = request.params.id
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
+    pool.query('SELECT * FROM user_business WHERE ub_industry = $1', [_qparam], (error, result) => {
+        if(error)
+        {
+            throw error
+        }
+
+        if (results.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
 }
 
 const createUserBusiness = (request, response) => {
@@ -1823,15 +1684,8 @@ const createUserBusiness = (request, response) => {
         else
         {
             var currentphase = result.rows[0].ub_id;
-            // console.log(currentphase);
             var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
             _currentid = "UB" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
         }
 
     // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -1873,129 +1727,6 @@ const deleteUserBusiness = (request, response) => {
     })
 }
 
-// USER_LEVEL
-const getUserLevel = (request, response) => {
-    pool.query('SELECT * FROM user_level', (error, results) => {
-        if(error)
-        {
-            throw error
-        }
-
-        if (results.rowCount == 0)
-        {
-            response.status(200).json({message: 'No Data Found'})
-        }
-        else
-        {
-            response.status(200).json(results.rows)
-        }
-    })
-}
-
-const getUserLevelById = (request, response) => {
-    const { _order, _qparam } = request.body
-
-    if (_order == 1) //query by name
-    {
-        pool.query('SELECT * FROM user_level WHERE ul_name LIKE %$1%', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
-
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-    else if (_order == 2) //query by id
-    {
-        pool.query('SELECT * FROM user_level WHERE ul_id = %1', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
-
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-}
-
-const createUserLevel = (request, response) => {
-    const { ul_id, ul_name } = request.body
-    // INI YANG DIPASTE
-    var _currentid;
-
-    pool.query('SELECT * FROM user_level ORDER BY ul_id DESC LIMIT 1', (error, result) => {
-        if(result.rowCount == 0)
-        {
-            _currentid = "UL0001";
-        }
-        else
-        {
-            var currentphase = result.rows[0].ul_id;
-            // console.log(currentphase);
-            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            // console.log(String(currentphase));
-            // console.log(parseInt(currentphase.substring(2, 6))+1);
-            // console.log(String(currentphase))
-            // console.log(currentnumber);
-            _currentid = "UL" + String(currentnumber).padStart(4, '0');
-            // console.log(_currentid);
-            // console.log('---LIMIT---');
-        }
-
-    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
-    pool.query('INSERT INTO user_level (ul_id, ul_name) VALUES ($1, $2)', [_currentid, ul_name], (error, result) => {
-        if(error)
-        {
-            throw error
-        }
-
-        response.status(201).send(`User Level added with ID: ${_currentid}`)
-    })
-  })
-}
-
-const updateUserLevel = (request, response) => {
-    const ul_id = request.params.id
-    const { ul_name } = request.body
-
-    pool.query('UPDATE user_level SET ul_name = $1 WHERE ul_id = $2', [ul_name, ul_id], (error, result) => {
-        if(error)
-        {
-            throw error
-        }
-
-        response.status(200).send(`User Level modified with ID: ${ul_id}`)
-    })
-}
-
-const deleteUserLevel = (request, response) => {
-    const ul_id = request.params.id
-
-    pool.query('DELETE FROM user_level WHERE ul_id = $1', [ul_id], (error, result) => {
-        if(error)
-        {
-            throw error
-        }
-
-        response.status(200).send(`User Level deleted with ID: ${ul_id}`)
-    })
-}
-
 // USERS
 const getUsers = (request, response) => {
     pool.query('SELECT * FROM users', (error, results) => {
@@ -2015,64 +1746,84 @@ const getUsers = (request, response) => {
     })
 }
 
-const getUsersById = (request, response) => {
-    const { _order, _qparam } = request.body
+const getUsersByEmail = (request, response) => {
+    const _qparam = request.params.id
 
-    if(_order == 1) //query by email
-    {
-        pool.query('SELECT * FROM users WHERE user_email LIKE $1', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+    pool.query('SELECT * FROM users WHERE user_email = $1', [_qparam], (error, results) => {
+        if(error)
+        {
+            throw error
+        }
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-    else if (_order == 2) //query by username
-    {
-        pool.query('SELECT * FROM users WHERE user_username LIKE %$1%', [_qparam],
-        (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+        if (results.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
+}
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
-    else_if (_order == 3) //query by fullname
-    {
-        pool.query('SELECT * FROM users WHERE user_fullname LIKE %$1%', [_qparam], (error, results) => {
-            if(error)
-            {
-                throw error
-            }
+const getUsersByUsername = (request, response) => {
+    const _qparam = request.params.id
 
-            if (results.rowCount == 0)
-            {
-                response.status(200).json({message: 'No Data Found'})
-            }
-            else
-            {
-                response.status(200).json(results.rows)
-            }
-        })
-    }
+    pool.query('SELECT * FROM users WHERE user_username = $1', [_qparam], (error, results) => {
+        if(error)
+        {
+            throw error
+        }
+
+        if(results.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
+}
+
+const getUsersByFirstName = (request, response) => {
+    const _qparam = request.params.id
+
+    pool.query('SELECT * FROM users WHERE user_first_name = $1', [_qparam], (error, results) => {
+        if(error)
+        {
+            throw error
+        }
+
+        if(results.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
+}
+
+const getUsersByLastName = (request, response) => {
+    const _qparam = request.params.id
+
+    pool.query('SELECT * FROM users WHERE user_last_name = $1', [_qparam], (error, results) => {
+        if(error)
+        {
+            throw error
+        }
+
+        if(results.rowCount == 0)
+        {
+            response.status(200).json({message: 'No Data Found'})
+        }
+        else
+        {
+            response.status(200).json(results.rows)
+        }
+    })
 }
 
 const createUsers = (request, response) => {
@@ -2088,15 +1839,8 @@ const createUsers = (request, response) => {
        else
        {
            var currentphase = result.rows[0].user_id;
-           // console.log(currentphase);
            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-           // console.log(String(currentphase));
-           // console.log(parseInt(currentphase.substring(2, 6))+1);
-           // console.log(String(currentphase))
-           // console.log(currentnumber);
            _currentid = "US" + String(currentnumber).padStart(4, '0');
-           // console.log(_currentid);
-           // console.log('---LIMIT---');
        }
 
    // BATAS INI YANG DIPASTE, sama tambah }) di bawah pool query ke 2
@@ -2112,36 +1856,6 @@ const createUsers = (request, response) => {
 
    })
  })
-}
-
-const createUsers2 = (request, response) => {
-    const {user_email, user_fullname, user_password} = request.body
-    var _currentid;
-
-    pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (error, result) => {
-        if(result.rowCount == 0)
-        {
-            _currentid = "US0001";
-        }
-        else
-        {
-            var currentphase = result.rows[0].user_id;
-            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            _currentid = "US" + String(currentnumber).padStart(4, '0');
-        }
-
-        pool.query('INSERT INTO users (user_id, user_email, user_fullname, user_password, user_creation_date) VALUES ($1, $2, $3, $4, NOW())', [_currentid, user_email, user_fullname, user_password],(error, result) => {
-            if(error)
-            {
-                throw error
-            }
-            else
-            {
-                response.status(200).json({message: 'User sucessfully inserted'})
-            }
-     
-        })
-    })
 }
 
 const updateUsers = (request, response) => {
@@ -2168,27 +1882,6 @@ const deleteUsers = (request, response) => {
         }
 
         response.status(200).send(`User deleted with ID: ${user_id}`)
-    })
-}
-
-// LOGIN
-const checkUser = (request, response) => {
-    const { user_email, user_password } = request.body
-
-    pool.query('SELECT * FROM users WHERE user_email = $1 AND user_password = $2', [user_email, user_password], (error, results) => {
-        if(error)
-        {
-            throw error
-        }
-
-        if (results.rowCount == 1)
-        {
-            response.status(200)
-        }
-        else
-        {
-            response.status(200).json({message: 'No User Found'})
-        }
     })
 }
 
@@ -2268,6 +1961,7 @@ module.exports =
     // TICKET_CLASS
     getTicketClass,
     getTicketClassById,
+    getTicketClassByName,
     createTicketClass,
     updateTicketClass,
     deleteTicketClass,
@@ -2279,23 +1973,18 @@ module.exports =
     deleteTicketUser,
     // USER_BUSINESS
     getUserBusiness,
-    getUserBusinessById,
+    getUserBusinessByName,
+    getUserBusinessByIndustry,
     createUserBusiness,
     updateUserBusiness,
     deleteUserBusiness,
-    // USER_LEVEL
-    getUserLevel,
-    getUserLevelById,
-    createUserLevel,
-    updateUserLevel,
-    deleteUserLevel,
     // USERS
     getUsers,
-    getUsersById,
+    getUsersByEmail,
+    getUsersByUsername,
+    getUsersByFirstName,
+    getUsersByLastName,
     createUsers,
-    createUsers2,
     updateUsers,
     deleteUsers,
-    //LOGIN
-    checkUser
 }
