@@ -141,9 +141,16 @@ app.post('/users/create', db.createUsers)
 app.put('/users/update/:id', db.updateUsers)
 app.delete('/users/delete/:id', db.deleteUsers)
 
-app.listen(port, () => {
-    console.log(
-          `App running on port ${port}.`
-    )
+// app.listen(port, () => {
+//     console.log(
+//           `App running on port ${port}.`
+//     )
+// })
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(
+    `App running on port ${port}.`
+  )
 })
 
