@@ -25,11 +25,6 @@ app.get('/homescene', middleware.checkToken, db.homeScene);
 // INDEX
 // app.get('/', middleware.checkToken);
 
-
-// app.get('/', (request, response) => {
-//     response.json({info: 'Node.js, Express, and Postgres API'})
-// })
-
 // // COURSE
 // app.get('/course/data', db.getCourse)
 // app.post('/course/data', db.getCourseById)
@@ -109,6 +104,13 @@ app.post('/ticket/create', db.createTicket)
 app.put('/ticket/update/:id', db.updateTicket)
 app.delete('/ticket/delete/:id', db.deleteTicket)
 
+// TICKET_USER
+app.get('/ticketuser/data', db.getTicketUser)
+app.get('/ticketuser/:id', db.getTicketUserById)
+app.post('/ticketuser/create', db.createTicketUser)
+app.put('/ticketuser/update/:id', db.updateTicketUser)
+app.delete('/ticketuser/delete/:id', db.deleteTicketUser)
+
 // TICKET_CLASS
 app.get('/ticketclass/data', db.getTicketClass)
 app.post('/ticketclass/data', db.getTicketClassById)
@@ -140,12 +142,6 @@ app.get('/users/data/:id', db.getUsersByLastName)
 app.post('/users/create', db.createUsers)
 app.put('/users/update/:id', db.updateUsers)
 app.delete('/users/delete/:id', db.deleteUsers)
-
-// app.listen(port, () => {
-//     console.log(
-//           `App running on port ${port}.`
-//     )
-// })
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

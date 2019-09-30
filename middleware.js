@@ -11,28 +11,22 @@ let checkToken = (req, res, next) => {
 
     if(token)
     {
-        console.log("Check token")
         jwt.verify(token, config.secret, (err, decoded) => {
             if (err) {
-                console.log("Tokennya error")
                 return res.json({
                     success: false,
                     message: 'Token is invalid'
                 });;
             }
             else {
-                console.log("Tokennya benar")
                 req.decoded = decoded;
                 req.id = decoded.id;
-                console.log(decoded);
-                console.log(decoded.id);
                 next();
             }
         })
     }
     else
     {
-        console.log("Tidak ada token")
         return res.json({
             success: false,
             message: 'Auth token is not supplied'
