@@ -23,7 +23,7 @@ app.get('/accountscene', middleware.checkToken, db.accountScene);
 // HOMESCENE
 app.get('/homescene', middleware.checkToken, db.homeScene);
 // INDEX
-app.get('/', middleware.checkToken);
+// app.get('/', middleware.checkToken);
 
 
 // app.get('/', (request, response) => {
