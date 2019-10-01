@@ -96,13 +96,19 @@ app.get('/homescene', middleware.checkToken, db.homeScene);
 // app.delete('/newscomment/delete:id', db.deleteNewsComment)
 
 // TICKET
-app.get('/ticket/data', db.getTicket)
-//app.post('/ticket/data', db.getTicketById)
-app.get('/ticket/data/:id', db.getTicketById)
-app.get('/ticket/data/:name', db.getTicketByName)
-app.post('/ticket/create', db.createTicket)
-app.put('/ticket/update/:id', db.updateTicket)
-app.delete('/ticket/delete/:id', db.deleteTicket)
+app.get('/ticket/data', middleware.checkToken, db.getTicket)
+app.get('/ticket/data/:id',  middleware.checkToken, db.getTicketById)
+app.get('/ticket/data/:name',  middleware.checkToken, db.getTicketByName)
+app.post('/ticket/create',  middleware.checkToken, db.createTicket)
+app.put('/ticket/update/:id',  middleware.checkToken, db.updateTicket)
+app.delete('/ticket/delete/:id',  middleware.checkToken, db.deleteTicket)
+
+// TICKET_CLASS
+app.get('/ticketclass/data',  middleware.checkToken, db.getTicketClass)
+app.post('/ticketclass/data',  middleware.checkToken, db.getTicketClassById)
+app.post('/ticketclass/create', middleware.checkToken, db.createTicketClass)
+app.put('/ticketclass/update/:id', middleware.checkToken, db.updateTicketClass)
+app.delete('/ticketclass/delete/:id',  middleware.checkToken, db.deleteTicketClass)
 
 // TICKET_USER
 app.get('/ticketuser/data', db.getTicketUser)
@@ -110,13 +116,6 @@ app.get('/ticketuser/:id', db.getTicketUserById)
 app.post('/ticketuser/create', db.createTicketUser)
 app.put('/ticketuser/update/:id', db.updateTicketUser)
 app.delete('/ticketuser/delete/:id', db.deleteTicketUser)
-
-// TICKET_CLASS
-app.get('/ticketclass/data', db.getTicketClass)
-app.post('/ticketclass/data', db.getTicketClassById)
-app.post('/ticketclass/create', db.createTicketClass)
-app.put('/ticketclass/update/:id', db.updateTicketClass)
-app.delete('/ticketclass/delete/:id', db.deleteTicketClass)
 
 // // USER_BUSINESS
 // app.get('/userbusiness/data', db.getUserBusiness)

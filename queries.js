@@ -2,14 +2,15 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const config = require('./config')
 const middleware = require('./middleware')
+const env = require('./environment')
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: 'znzlkwbarqxmos',
-    host: 'ec2-54-243-243-76.compute-1.amazonaws.com',
-    database: 'dfe6td2dpbumh4',
-    password: 'af356e2a40618caee183fca772a997cf9392882c2ed9d161162ae7d4bf893d17',
-    port: 5432,
-    ssl: true
+    user: env.user,
+    host: env.host,
+    database: env.database,
+    password: env.password,
+    port: env.port,
+    ssl: env.ssl
 })
 
 // REGISTER
@@ -90,7 +91,7 @@ const login = (request, response) => {
             "message": "Please fill all required fields!"
         });
     }
-    else
+    else if(email && password)
     {
         pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
             if (err) return  response.status(500).send('Server error!');
@@ -194,7 +195,7 @@ const getCourseByName = (request, response) => {
 }
 
 const createCourse = (request, response) => {
-    const { course_id, course_name, course_desc, cl_id, cv_id, ul_id } = request.body
+    const { course_name, course_desc, cl_id, cv_id, ul_id } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM course ORDER BY course_id DESC LIMIT 1', (error, result) => {
@@ -269,7 +270,6 @@ const getCourseFile = (request, response) => {
 }
 
 const getCourseFileByName = (request, response) => {
-    // const { _order, _qparam } = request.body
     const _qparam = request.params.id
 
     pool.query('SELECT * FROM course_file WHERE cf_title = $1', [_qparam], (error, results) => {
@@ -290,9 +290,7 @@ const getCourseFileByName = (request, response) => {
 }
 
 const createCourseFile = (request, response) => {
-    const { cf_id, cf_title, cf_data } = request.params.id
-
-    // INI YANG DIPASTE
+    const { cf_title, cf_data } = request.params.id
     var _currentid;
 
     pool.query('SELECT * FROM course_file ORDER BY cf_id DESC LIMIT 1', (error, result) => {
@@ -364,7 +362,6 @@ const getCourseLevel = (request, response) => {
 }
 
 const getCourseLevelByName = (request, response) => {
-    // const { _order, _qparam } = request.body
     const _qparam = request.params.id
 
     pool.query('SELECT * FROM course_level WHERE cf_title = $1', [_qparam], (error, results) => {
@@ -385,7 +382,7 @@ const getCourseLevelByName = (request, response) => {
 }
 
 const createCourseLevel = (request, response) => {
-    const { cl_id, cl_name, cl_desc } = request.body
+    const { cl_name, cl_desc } = request.body
 
     var _currentid;
 
@@ -458,7 +455,6 @@ const getCourseVideo = (request, response) => {
 }
 
 const getCourseVideoByName = (request, response) => {
-    // const { _order, _qparam } = request.body
     const _qparam = request.params.id
     
     pool.query('SELECT * FROM course_video WHERE cv_title = $1', [_qparam], (error, results) => {
@@ -479,8 +475,7 @@ const getCourseVideoByName = (request, response) => {
 }
 
 const createCourseVideo = (request, response) => {
-    const { cv_id, cv_title, cv_link } = request.body
-    // INI YANG DIPASTE
+    const { cv_title, cv_link } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM course_video ORDER BY cv_id DESC LIMIT 1', (error, result) => {
@@ -613,7 +608,7 @@ const getEventByLocation = (request, response) => {
 }
 
 const createEvent = (request, response) => {
-    const { event_id, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img } = request.body
+    const { event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM event ORDER BY event_id DESC LIMIT 1', (error, result) => {
@@ -730,7 +725,7 @@ const getEventTypeById = (request, response) => {
 }
 
 const createEventType = (request, response) => {
-    const { et_id, et_name, et_desc } = request.body
+    const { et_name, et_desc } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM event_type ORDER BY et_id DESC LIMIT 1', (error, result) => {
@@ -823,7 +818,7 @@ const getInboxById = (request, response) => {
 }
 
 const createInbox = (request, response) => {
-    const { inbox_id, inbox_msg, inbox_datetime, user_id } = request.body
+    const { inbox_msg, inbox_datetime, user_id } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM inbox ORDER BY inbox_id DESC LIMIT 1', (error, result) => {
@@ -938,7 +933,7 @@ const getNewsById = (request, response) => {
 }
 
 const createNews = (request, response) => {
-    const { news_id, news_title, news_content, news_date } = request.body
+    const { news_title, news_content, news_date } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM news ORDER BY news_id DESC LIMIT 1', (error, result) => {
@@ -1054,7 +1049,7 @@ const getNewsCategoryById = (request, response) => {
 }
 
 const createNewsCategory = (request, response) => {
-    const { nc_id, nc_name } = request.body
+    const { nc_name } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM news_category ORDER BY nc_id DESC LIMIT 1', (error, result) => {
@@ -1168,7 +1163,7 @@ const getNewsCommentById = (request, response) => {
 }
 
 const createNewsComment = (request, response) => {
-    const { nc_id, nc_content, nc_date, news_id, user_id } = request.body
+    const { nc_content, nc_date, news_id, user_id } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM news_comment ORDER BY nc_id DESC LIMIT 1', (error, result) => {
@@ -1397,7 +1392,7 @@ const getTicketClassByName = (request, response) => {
 }
 
 const createTicketClass = (request, response) => {
-    const { tc_id, tc_name } = request.body
+    const { tc_name } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM ticket_class ORDER BY tc_id DESC LIMIT 1', (error, result) => {
@@ -1604,7 +1599,7 @@ const getUserBusinessByIndustry = (request, response) => {
 }
 
 const createUserBusiness = (request, response) => {
-    const { ub_id, ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio } = request.body
+    const { ub_name, ub_industry, ub_staffnumber, ub_marketingsales, ub_bio } = request.body
     var _currentid;
 
     pool.query('SELECT * FROM user_business ORDER BY ub_id DESC LIMIT 1', (error, result) => {
@@ -1757,7 +1752,7 @@ const getUsersByLastName = (request, response) => {
 }
 
 const createUsers = (request, response) => {
-   const { user_id, user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password } = request.body
+   const { user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password } = request.body
    var _currentid;
 
    pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (error, result) => {
@@ -1846,6 +1841,7 @@ module.exports =
     // EVENT
     getEvent,
     getEventByName,
+    getEventByLocation,
     createEvent,
     updateEvent,
     deleteEvent,
