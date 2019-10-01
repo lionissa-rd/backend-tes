@@ -77,7 +77,7 @@ const register = (request, response) => {
 // LOGIN
 const login = (request, response) => {
     const email = request.body.userEmail
-    const password = bcrypt.hashSync(String(request.body.userPassword))
+    var password = request.body.userPassword
 
     if(!email || !password)
     {
@@ -87,9 +87,17 @@ const login = (request, response) => {
             "message": "Please fill all required fields!"
         });
     }
-    else if(email && password)
+    else if (email.length > 0 && password.length > 0 && email != undefined && password != undefined)
     {
+        var password = bcrypt.hashSync(String(password))
         pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
+            const  result  =  bcrypt.compare(password, String(res.rows[0].user_password));
+            if(!result) return  response.status(401).json({
+                "success": false,
+                "auth": false,
+                "message": "Invalid Password/Username"
+            });
+
             if (err) return  response.status(500).json({
                 "success": false,
                 "message": "Server error"
@@ -100,29 +108,27 @@ const login = (request, response) => {
                 "message": "User not found"
             });
 
-            if (res.rowCount == 0) return  response.status(404).json({
-                "success": false,
-                "auth": false,
-                "message": "User not found"
-            });
-            
-            const  result  =  bcrypt.compare(password, String(res.rows[0].user_password));
-            if(!result) return  response.status(401).json({
-                "success": false,
-                "auth": false,
-                "message": "Invalid Password/Username"
-            });
+            if (res.rowCount == 0 || !result) 
+            {
+                return  response.status(404).json({
+                    "success": false,
+                    "auth": false,
+                    "message": "User not found"
+                });
+            } 
+            else
+            {
+                const  expiresIn  =  24  *  60  *  60;
+                const  accessToken  =  jwt.sign({ id:  res.rows[0].user_id }, config.secret, {
+                    expiresIn:  expiresIn
+                });
     
-            const  expiresIn  =  24  *  60  *  60;
-            const  accessToken  =  jwt.sign({ id:  res.rows[0].user_id }, config.secret, {
-                expiresIn:  expiresIn
-            });
-
-            response.status(200).json({ 
-                "success": true,
-                "auth": false,
-                "access_token":  accessToken, 
-                "expires_in":  expiresIn});
+                response.status(200).json({ 
+                    "success": true,
+                    "auth": true,
+                    "access_token":  accessToken, 
+                    "expires_in":  expiresIn});
+            }
         });
     }
 }

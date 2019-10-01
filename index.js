@@ -43,12 +43,13 @@ app.get('/accountscene', middleware.checkToken, multi.accountScene);
 // HOMESCENE
 app.get('/homescene', middleware.checkToken, multi.homeScene);
 
-// // COURSE
-// app.get('/course/data', course.getCourse)
-// app.post('/course/data', course.getCourseById)
-// app.post('/course/create', course.createCourse)
-// app.put('/course/update/:id', course.updateCourse)
-// app.delete('/course/delete/:id', course.deleteCourse)
+// COURSE
+app.get('/course/data', middleware.checkToken,course.getCourse)
+app.get('/course/data/id/:id', middleware.checkToken, course.getCourseById)
+app.get('/course/data/name/:id', middleware.checkToken,course.getCourseByName)
+app.post('/course/create', middleware.checkToken, course.createCourse)
+app.put('/course/update/:id', middleware.checkToken, course.updateCourse)
+app.delete('/course/delete/:id', middleware.checkToken, course.deleteCourse)
 
 // // COURSE_FILE
 // app.get('/coursefile/data', course_file.getCourseFile)
@@ -94,7 +95,7 @@ app.get('/homescene', middleware.checkToken, multi.homeScene);
 
 // // NEWS
 // app.get('/news/data', news.getNews)
-// app.post('/news/data', news.getNewsById)
+// app.post('/news/data/title/:name', news.getNewsByTitle)
 // app.post('/news/create', news.createNews)
 // app.put('/news/update/:id', news.updateNews)
 // app.delete('/news/delete/:id', news.deleteNews)
@@ -115,25 +116,25 @@ app.get('/homescene', middleware.checkToken, multi.homeScene);
 
 // TICKET
 app.get('/ticket/data', middleware.checkToken, ticket.getTicket)
-app.get('/ticket/data/:id',  middleware.checkToken, ticket.getTicketById)
-app.get('/ticket/data/:name',  middleware.checkToken, ticket.getTicketByName)
-app.post('/ticket/create',  middleware.checkToken, ticket.createTicket)
-app.put('/ticket/update/:id',  middleware.checkToken, ticket.updateTicket)
-app.delete('/ticket/delete/:id',  middleware.checkToken, ticket.deleteTicket)
+app.get('/ticket/data/id/:id', middleware.checkToken, ticket.getTicketById)
+app.get('/ticket/data/name/:id', middleware.checkToken, ticket.getTicketByName)
+app.post('/ticket/create', middleware.checkToken, ticket.createTicket)
+app.put('/ticket/update/:id', middleware.checkToken, ticket.updateTicket)
+app.delete('/ticket/delete/:id', middleware.checkToken, ticket.deleteTicket)
 
-// TICKET_CLASS
-app.get('/ticketclass/data',  middleware.checkToken, ticket_class.getTicketClass)
-app.post('/ticketclass/data',  middleware.checkToken, ticket_class.getTicketClassById)
-app.post('/ticketclass/create', middleware.checkToken, ticket_class.createTicketClass)
-app.put('/ticketclass/update/:id', middleware.checkToken, ticket_class.updateTicketClass)
-app.delete('/ticketclass/delete/:id',  middleware.checkToken,ticket_class.deleteTicketClass)
+// // TICKET_CLASS
+// app.get('/ticketclass/data',  middleware.checkToken, ticket_class.getTicketClass)
+// app.post('/ticketclass/data',  middleware.checkToken, ticket_class.getTicketClassById)
+// app.post('/ticketclass/create', middleware.checkToken, ticket_class.createTicketClass)
+// app.put('/ticketclass/update/:id', middleware.checkToken, ticket_class.updateTicketClass)
+// app.delete('/ticketclass/delete/:id',  middleware.checkToken,ticket_class.deleteTicketClass)
 
-// TICKET_USER
-app.get('/ticketuser/data', ticket_user.getTicketUser)
-app.get('/ticketuser/:id', ticket_user.getTicketUserById)
-app.post('/ticketuser/create', ticket_user.createTicketUser)
-app.put('/ticketuser/update/:id', ticket_user.updateTicketUser)
-app.delete('/ticketuser/delete/:id', ticket_user.deleteTicketUser)
+// // TICKET_USER
+// app.get('/ticketuser/data', middleware.checkToken, ticket_user.getTicketUser)
+// app.get('/ticketuser/:id',  middleware.checkToken, ticket_user.getTicketUserById)
+// app.post('/ticketuser/create',  middleware.checkToken, ticket_user.createTicketUser)
+// app.put('/ticketuser/update/:id',  middleware.checkToken, ticket_user.updateTicketUser)
+// app.delete('/ticketuser/delete/:id',  middleware.checkToken, ticket_user.deleteTicketUser)
 
 // // USER_BUSINESS
 // app.get('/userbusiness/data', user_business.getUserBusiness)
@@ -144,14 +145,15 @@ app.delete('/ticketuser/delete/:id', ticket_user.deleteTicketUser)
 // app.delete('/userbusiness/delete/:id', user_business.deleteUserBusiness)
 
 // USERS
-app.get('/users/data', users.getUsers)
-app.get('/users/data/:id', users.getUsersByEmail)
-app.get('/users/data/:id', users.getUsersByUsername)
-app.get('/users/data/:id', users.getUsersByFirstName)
-app.get('/users/data/:id', users.getUsersByLastName)
-app.post('/users/create', users.createUsers)
-app.put('/users/update/:id', users.updateUsers)
-app.delete('/users/delete/:id', users.deleteUsers)
+app.get('/users/data', middleware.checkToken, users.getUsers)
+// getusersbyid is on accountscene endpoint
+app.get('/users/data/email/:id', middleware.checkToken, users.getUsersByEmail)
+app.get('/users/data/username/:id', middleware.checkToken, users.getUsersByUsername)
+app.get('/users/data/firstname/:id', middleware.checkToken, users.getUsersByFirstName)
+app.get('/users/data/lastname/:id', middleware.checkToken,users.getUsersByLastName)
+// create user is on register endpoint
+app.put('/users/update/:id', middleware.checkToken, users.updateUsers)
+app.delete('/users/delete/:id', middleware.checkToken, users.deleteUsers)
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

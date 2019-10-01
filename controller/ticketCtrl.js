@@ -5,16 +5,26 @@ const getTicket = (request, response) => {
     pool.query('SELECT * FROM ticket', (error, results) =>{
         if (error)
         {
-            throw error
+            return response.status(500).json({
+                "success": false,
+                "message": "Server error"
+            });
         }
 
         if (results.rowCount == 0)
         {
-            response.status(200).json({message: 'No Data Found'})
+            return response.status(200).json({
+                "success": true,
+                "data": {},
+                "message": "No data available"
+            });
         }
         else
         {
-            response.status(200).json(results.rows)
+            return response.status(200).json({
+                "success": true,
+                "data": results.rows
+            });
         }
     })
 }
@@ -25,16 +35,26 @@ const getTicketById = (request, response) => {
     pool.query('SELECT * FROM ticket WHERE ticket_id = $1', [ticket_id], (error, result) => {
         if (error)
         {
-            throw error
+            return response.status(500).json({
+                "success": false,
+                "message": "Server error"
+            });
         }
 
         if (result.rowCount == 0)
         {
-            response.status(200).json({message: 'No Data Found'})
+            return response.status(200).json({
+                "success": true,
+                "data": {},
+                "message": "No data available"
+            });
         }
         else
         {
-            response.status(200).json(results.rows)
+            return response.status(200).json({
+                "success": true,
+                "data": results.rows
+            });
         }
     })
 }
@@ -43,18 +63,28 @@ const getTicketByName = (request, response) => {
     const ticket_name = request.params.id
 
     pool.query('SELECT * FROM ticket WHERE ticket_name = $1', [ticket_name], (error, result) => {
-        if(error)
+        if (error)
         {
-            throw error
+            return response.status(500).json({
+                "success": false,
+                "message": "Server error"
+            });
         }
 
-        if(result.rowCount == 0)
+        if (result.rowCount == 0)
         {
-            response.status(200).json({message: 'No Data Found'})
+            return response.status(200).json({
+                "success": true,
+                "data": {},
+                "message": "No data available"
+            });
         }
         else
         {
-            response.status(200).json(results.rows)
+            return response.status(200).json({
+                "success": true,
+                "data": results.rows
+            });
         }
     })
 }
@@ -78,10 +108,17 @@ const createTicket = (request, response) => {
         pool.query('INSERT INTO ticket (ticket_id, ticket_name, ticket_date, tc_id) VALUES ($1, $2, NOW(), $3)', [_currentid, ticket_name, tc_id], (error, result) => {
             if (error)
             {
-                throw error;
+               return response.status(500).json({
+                   "success": false,
+                   "message": "Server error"
+               });
             }
 
-            response.status(201).send(`Ticket added with ID: ${_currentid}`)
+            //response.status(201).send(`Ticket added with ID: ${_currentid}`)
+            response.status(201).json({
+                "success": true,
+                "message": "Ticket has been added"
+            })
          })
     })
 }
@@ -96,10 +133,17 @@ const updateTicket = (request, response) => {
         (error, result) => {
             if (error)
             {
-                throw error
+                response.status(500).json({
+                    "success": false,
+                    "message": "Server error"
+                });
             }
 
-        response.status(200).send(`Ticket modified with ID: ${ticket_id}`)
+        //response.status(200).send(`Ticket modified with ID: ${ticket_id}`)
+        response.status(200).json({
+            "success": true,
+            "message": "Ticket has been modified"
+        });
     })
 }
 
@@ -109,10 +153,17 @@ const deleteTicket = (request, response) => {
     pool.query('DELETE FROM ticket WHERE ticket_id = $1', [ticket_id], (error, result)=> {
         if(error)
         {
-            throw error
+            response.status(500).json({
+                "success": false,
+                "message": "Server error"
+            });
         }
 
-        response.status(200).send(`Ticket deleted with ID: ${ticket_id}`)
+        //response.status(200).send(`Ticket deleted with ID: ${ticket_id}`)
+        response.status(200).json({
+            "success": true,
+            "message": "Ticket has been deleted"
+        });
     })
 }
 
