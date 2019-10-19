@@ -4,7 +4,7 @@ var { pool } = require('../pool')
 const accountScene = (request, response) => {
     //getUser
     console.log(request.id);
-    pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_id = $1', [request.id], (err, res) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_id = $1', [request.id], (err, res) => {
         if (err) return response.status(500).json({
             "success": false,
             "message": "Server error"
@@ -46,7 +46,7 @@ const homeScene = (request, response) => {
         else
         {
             console.log(res.rows);
-            pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_id = $1', [request.id], (err, results) => {
+            pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_id = $1', [request.id], (err, results) => {
                 if (err) return response.status(500).json({
                     "success": false,
                     "message": "Server not found"

@@ -22,7 +22,7 @@ const getEvent = (request, response) => {
 const getEventByName = (request, response) => {
     const _qparam = request.params.id
     
-    pool.query('SELECT * FROM event WHERE event_name = $1', [_qparam], (error, results) => {
+    pool.query('SELECT * FROM event WHERE event_name = $1 ORDER BY event_date DESC', [_qparam], (error, results) => {
         if(error)
         {
             throw error
@@ -42,7 +42,7 @@ const getEventByName = (request, response) => {
 const getEventByPrice = (request, response) => {
     const _qparam = request.params.id
 
-    pool.query('SELECT * FROM event WHERE event_price = $1', [_qparam], (error, results) => {
+    pool.query('SELECT * FROM event WHERE event_price = $1 ORDER BY event_date DESC', [_qparam], (error, results) => {
         if(error)
         {
             throw error
@@ -59,10 +59,10 @@ const getEventByPrice = (request, response) => {
     })
 }
 
-const getEventByLocation = (request, response) => {
+const getEventByCategory = (request, response) => {
     const _qparam = request.params.id
 
-    pool.query('SELECT * FROM event WHERE event_location = $1', [_qparam], (error, results) => {
+    pool.query('SELECT * FROM event WHERE event_category = $1 ORDER BY event_date DESC', [_qparam], (error, results) => {
         if(error)
         {
             throw error
@@ -77,10 +77,11 @@ const getEventByLocation = (request, response) => {
             response.status(200).json(results.rows)
         }
     })
+
 }
 
 const createEvent = (request, response) => {
-    const { event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img } = request.body
+    const { event_name, event_details, event_img, event_category, event_price, available_seat, event_date} = request.body
     var _currentid;
 
     pool.query('SELECT * FROM event ORDER BY event_id DESC LIMIT 1', (error, result) => {
@@ -95,7 +96,7 @@ const createEvent = (request, response) => {
             _currentid = "EV" + String(currentnumber).padStart(4, '0');
         }
 
-    pool.query('INSERT INTO event (event_id, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [_currentid, event_name, event_location, event_details, event_prize, ticket_id, et_id, event_img], (error, result) => {
+    pool.query('INSERT INTO event (event_id, event_name, event_details, event_img, event_category, event_price, available_seat, event_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [_currentid, event_name, event_details, event_img, event_category, event_price, available_seat, event_date], (error, result) => {
         if(error)
         {
             throw error
@@ -107,8 +108,7 @@ const createEvent = (request, response) => {
 }
 
 const updateEvent = (request, response) => {
-    const event_id = request.params.id
-    const {event_name} = request.body
+    const {event_id, event_name} = request.body
 
     pool.query(
         'UPDATE event SET event_name = $1 WHERE event_id = $2', [event_name, event_id],
@@ -124,7 +124,7 @@ const updateEvent = (request, response) => {
 }
 
 const deleteEvent = (request, response) => {
-    const event_id = request.params.id
+    const {event_id} = request.body
 
     pool.query('DELETE FROM event WHERE event_id = $1', [event_id], (error, result) => {
         if(error)
@@ -140,7 +140,8 @@ module.exports = {
     // EVENT
     getEvent,
     getEventByName,
-    getEventByLocation,
+    getEventByPrice,
+    getEventByCategory,
     createEvent,
     updateEvent,
     deleteEvent

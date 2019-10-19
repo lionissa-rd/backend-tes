@@ -2,7 +2,7 @@ var { pool } = require('../pool')
 
 // USERS
 const getUsers = (request, response) => {
-    pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users', (error, results) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users', (error, results) => {
         if(error)
         {
            return response.status(500).json({
@@ -34,7 +34,7 @@ const getUsers = (request, response) => {
 const getUsersByEmail = (request, response) => {
     const _qparam = request.params.id
 
-    pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_email = $1', [_qparam], (error, results) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_email = $1', [_qparam], (error, results) => {
         if(error)
         {
             return response.status(500).json({
@@ -64,7 +64,7 @@ const getUsersByEmail = (request, response) => {
 const getUsersByUsername = (request, response) => {
     const _qparam = request.params.id
 
-    pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_username = $1', [_qparam], (error, results) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_username = $1', [_qparam], (error, results) => {
         if(error)
         {
             return response.status(500).json({
@@ -94,7 +94,7 @@ const getUsersByUsername = (request, response) => {
 const getUsersByFirstName = (request, response) => {
     const _qparam = request.params.id
 
-    pool.query('SELECT  user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_first_name = $1', [_qparam], (error, results) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_first_name = $1', [_qparam], (error, results) => {
         if(error)
         {
             return response.status(500).json({
@@ -124,7 +124,7 @@ const getUsersByFirstName = (request, response) => {
 const getUsersByLastName = (request, response) => {
     const _qparam = request.params.id
 
-    pool.query('SELECT user_email, user_username, user_creation_date, ul_id, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_last_name = $1', [_qparam], (error, results) => {
+    pool.query('SELECT user_email, user_username, user_creation_date, ub_id, inbox_id, user_avatar, user_first_name, user_last_name, user_role, user_membership FROM users WHERE user_last_name = $1', [_qparam], (error, results) => {
         if(error)
         {
             return response.status(500).json({
@@ -181,8 +181,7 @@ const getUsersByLastName = (request, response) => {
 // }
 
 const updateUsers = (request, response) => {
-    const user_id = request.params.id
-    const {user_email} = request.body
+    const {user_id, user_email} = request.body
 
     pool.query('UPDATE users SET user_email = $1 WHERE user_id = $2', [user_email, user_id], (error, result) => {
         if(error)
@@ -202,9 +201,9 @@ const updateUsers = (request, response) => {
 }
 
 const deleteUsers = (request, response) => {
-    const user_id = request.params.id
+    const {user_id} = request.body
 
-    pool.query('DELETE FROM user WHERE user_id = $1', [user_id], (error, result) => {
+    pool.query('DELETE FROM users WHERE user_id = $1', [user_id], (error, result) => {
         if(error)
         {
             return response.status(500).json({

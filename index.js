@@ -8,16 +8,12 @@ const router = express.Router();
 
 const auth = require('./auth/authCtrl')
 const course = require('./controller/courseCtrl')
-const course_file = require('./controller/coursefileCtrl')
-const course_level = require('./controller/courselevelCtrl')
-const course_video = require('./controller/coursevideoCtrl')
 const event = require('./controller/eventCtrl')
-const event_type = require('./controller/eventtypeCtrl')
+const forum = require('./controller/forumCtrl')
+const forum_comment = require('./controller/forumcommentCtrl')
 const inbox = require('./controller/inboxCtrl')
-const news_comment = require('./controller/newscommentCtrl')
-const news_category = require('./controller/newscategoryCtrl')
-const news = require('./controller/newsCtrl')
-const ticket_class = require('./controller/ticketclassCtrl')
+const like_forum = require('./controller/likeforumCtrl')
+const like_forum_comment = require('./controller/likeforumcommentCtrl')
 const ticket_user = require('./controller/ticketuserCtrl')
 const ticket = require('./controller/ticketCtrl')
 const user_business = require('./controller/userbusinessCtrl')
@@ -30,6 +26,8 @@ app.use(
     extended: false,
   })
 )
+
+// GANTI PUT KE POST UNTUK UPDATE
 
 // INDEX
 // app.get('/', middleware.checkToken);
@@ -44,47 +42,35 @@ app.get('/accountscene', middleware.checkToken, multi.accountScene);
 app.get('/homescene', middleware.checkToken, multi.homeScene);
 
 // COURSE
-app.get('/course/data', middleware.checkToken,course.getCourse)
+app.get('/course/data', middleware.checkToken, course.getCourse)
 app.get('/course/data/id/:id', middleware.checkToken, course.getCourseById)
-app.get('/course/data/name/:id', middleware.checkToken,course.getCourseByName)
+app.get('/course/data/name/:id', middleware.checkToken, course.getCourseByName)
 app.post('/course/create', middleware.checkToken, course.createCourse)
-app.put('/course/update/:id', middleware.checkToken, course.updateCourse)
-app.delete('/course/delete/:id', middleware.checkToken, course.deleteCourse)
+app.post('/course/update', middleware.checkToken, course.updateCourse)
+app.post('/course/delete', middleware.checkToken, course.deleteCourse)
 
-// // COURSE_FILE
-// app.get('/coursefile/data', course_file.getCourseFile)
-// app.post('/coursefile/data', course_file.getCourseFileById)
-// app.post('/coursefile/create', course_file.createCourseFile)
-// app.put('/coursefile/update/:id', course_file.updateCourseFile)
-// app.delete('/coursefile/delete/:id', course_file.deleteCourseFile)
+// EVENT
+app.get('/event/data', middleware.checkToken, event.getEvent)
+app.get('/event/data/id/:id', middleware.checkToken, event.getEventById)
+app.get('/event/data/name/:id', middleware.checkToken, event.getEventByName)
+app.get('/event/data/cat/:id', event.getEventByCategory)
+app.post('/event/create', middleware.checkToken, event.createEvent)
+app.post('/event/update/:id', middleware.checkToken, event.updateEvent)
+app.post('/event/delete', middleware.checkToken, event.deleteEvent)
 
-// // COURSE_LEVEL
-// app.get('/courselevel/data', course_level.getCourseLevel)
-// app.post('/courselevel/data', course_level.getCourseLevelById)
-// app.post('/courselevel/create', course_level.createCourseLevel)
-// app.put('/courselevel/update/:id', course_level.updateCourseLevel)
-// app.delete('/courselevel/delete/:id', course_level.deleteCourseLevel)
+// FORUM
+app.get('/forum/data', middleware.checkToken, forum.getForum)
+app.get('/forum/data/latest', middleware.checkToken, forum.getForumByLatest)
+app.get('/forum/data/id/:id', middleware.checkToken, forum.getForumById)
+app.post('/forum/create', middleware.checkToken, forum.createForum)
+app.post('/forum/update', middleware.checkToken, forum.updateForum)
+app.post('/forum/delete', middleware.checkToken, forum.deleteForum)
 
-// // COURSE_VIDEO
-// app.get('/coursevideo/data', course_video.getCourseVideo)
-// app.post('/coursevideo/data', course_video.getCourseVideoById)
-// app.post('/coursevideo/create', course_video.createCourseVideo)
-// app.put('/coursevideo/update/:id', course_video.updateCourseVideo)
-// app.delete('/coursevideo/delete/:id', course_video.deleteCourseVideo)
-
-// // EVENT
-// app.get('/event/data', event.getEvent)
-// app.post('/event/data', event.getEventById)
-// app.post('/event/create', event.createEvent)
-// app.put('/event/update/:id', event.updateEvent)
-// app.delete('/event/delete/:id', event.deleteEvent)
-
-// // EVENT_TYPE
-// app.get('/eventtype/data', event_type.getEventType)
-// app.post('/eventtype/data', event_type.getEventTypeById)
-// app.post('/eventtype/create', event_type.createEventType)
-// app.put('/eventtype/update/:id', event_type.updateEventType)
-// app.delete('/eventtype/delete/:id', event_type.deleteEventType)
+// FORUM'S COMMENT
+app.get('/forumcomment/data', middleware.checkToken, forum_comment.getForumComment)
+app.get('/forumcomment/data/id/:id', middleware.checkToken, forum_comment.getForumCommentById)
+app.post('/forumcomment/create', middleware.checkToken, forum_comment.createForumComment)
+app.post('/forumcomment/delete', middleware.checkToken, forum_comment.deleteForumComment)
 
 // // INBOX
 // app.get('/inbox/data', inbox.getInbox)
@@ -93,41 +79,22 @@ app.delete('/course/delete/:id', middleware.checkToken, course.deleteCourse)
 // app.put('/inbox/update/:id', inbox.updateInbox)
 // app.delete('/inbox/delete/:id', inbox.deleteInbox)
 
-// // NEWS
-// app.get('/news/data', news.getNews)
-// app.post('/news/data/title/:name', news.getNewsByTitle)
-// app.post('/news/create', news.createNews)
-// app.put('/news/update/:id', news.updateNews)
-// app.delete('/news/delete/:id', news.deleteNews)
+// LIKE FORUM
+app.get('/likeforum/data/id/:id', middleware.checkToken, like_forum.getLikeForum)
+app.post('/likeforum/create', middleware.checkToken, like_forum.createLikeForum)
+app.post('/likeforum/delete', middleware.checkToken, like_forum.deleteLikeForum)
 
-// // NEWS_CATEGORY
-// app.get('/newscategory/data', news_category.getNewsCategory)
-// app.post('/newscategory/data', news_category.getNewsCategoryById)
-// app.post('/newscategory/create', news_category.createNewsCategory)
-// app.put('/newscategory/update/:id', news_category.updateNewsCategory)
-// app.delete('/newscategory/delete/:id', news_category.deleteNewsCategory)
-
-// // NEWS_COMMENT
-// app.get('/newscomment/data', news_comment.getNewsComment)
-// app.post('/newscomment/data', news_comment.getNewsCommentById)
-// app.post('/newscomment/create', news_comment.createNewsComment)
-// app.put('/newscomment/update/:id', news_comment.updateNewsComment)
-// app.delete('/newscomment/delete:id', news_comment.deleteNewsComment)
+// LIKE FORUM'S COMMENT
+app.get('/likeforumcomment/data/id/:id', middleware.checkToken, like_forum_comment.getLikeForumComment)
+app.post('/likeforumcomment/create', middleware.checkToken, like_forum_comment.createLikeForumComment)
+app.post('/likeforumcomment/delete', middleware.checkToken, like_forum_comment.deleteLikeForumComment)
 
 // TICKET
 app.get('/ticket/data', middleware.checkToken, ticket.getTicket)
 app.get('/ticket/data/id/:id', middleware.checkToken, ticket.getTicketById)
-app.get('/ticket/data/name/:id', middleware.checkToken, ticket.getTicketByName)
+app.get('/ticket/data/user/:id', middleware.checkToken, ticket.getTicketByUser)
 app.post('/ticket/create', middleware.checkToken, ticket.createTicket)
-app.put('/ticket/update/:id', middleware.checkToken, ticket.updateTicket)
-app.delete('/ticket/delete/:id', middleware.checkToken, ticket.deleteTicket)
-
-// // TICKET_CLASS
-// app.get('/ticketclass/data',  middleware.checkToken, ticket_class.getTicketClass)
-// app.post('/ticketclass/data',  middleware.checkToken, ticket_class.getTicketClassById)
-// app.post('/ticketclass/create', middleware.checkToken, ticket_class.createTicketClass)
-// app.put('/ticketclass/update/:id', middleware.checkToken, ticket_class.updateTicketClass)
-// app.delete('/ticketclass/delete/:id',  middleware.checkToken,ticket_class.deleteTicketClass)
+app.post('/ticket/delete', middleware.checkToken, ticket.deleteTicket)
 
 // // TICKET_USER
 // app.get('/ticketuser/data', middleware.checkToken, ticket_user.getTicketUser)
@@ -152,8 +119,8 @@ app.get('/users/data/username/:id', middleware.checkToken, users.getUsersByUsern
 app.get('/users/data/firstname/:id', middleware.checkToken, users.getUsersByFirstName)
 app.get('/users/data/lastname/:id', middleware.checkToken,users.getUsersByLastName)
 // create user is on register endpoint
-app.put('/users/update/:id', middleware.checkToken, users.updateUsers)
-app.delete('/users/delete/:id', middleware.checkToken, users.deleteUsers)
+app.post('/users/update', middleware.checkToken, users.updateUsers)
+app.post('/users/delete', middleware.checkToken, users.deleteUsers)
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
