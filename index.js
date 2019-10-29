@@ -125,9 +125,9 @@ app.post('/users/delete', middleware.checkToken, users.deleteUsers)
 const PORT = process.env.PORT || 3001;
 const PORT2 = process.env.PORT || 3002;
 
-app.listen(PORT1, () => {
+app.listen(PORT, () => {
   console.log(
-    `App running on port ${port1}.`
+    `App running on port ${port}.`
   )
 })
 
