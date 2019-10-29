@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: hkoznoqs5
+  api_key: '795259378995235'
+  api_secret: 8P56W3S7LTvJIlwIkMAOuXveP9k
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: hkoznoqs5
+  api_key: '795259378995235'
+  api_secret: 8P56W3S7LTvJIlwIkMAOuXveP9k
+  enhance_image_tag: true
+  static_file_support: true
+test:
+  cloud_name: hkoznoqs5
+  api_key: '795259378995235'
+  api_secret: 8P56W3S7LTvJIlwIkMAOuXveP9k
+  enhance_image_tag: true
+  static_file_support: false

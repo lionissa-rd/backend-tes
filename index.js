@@ -76,8 +76,8 @@ app.post('/forumcomment/delete', middleware.checkToken, forum_comment.deleteForu
 // app.get('/inbox/data', inbox.getInbox)
 // app.post('/inbox/data', inbox.getInboxById)
 // app.post('/inbox/create', inbox.createInbox)
-// app.put('/inbox/update/:id', inbox.updateInbox)
-// app.delete('/inbox/delete/:id', inbox.deleteInbox)
+// app.post('/inbox/update/:id', inbox.updateInbox)
+// app.post('/inbox/delete/:id', inbox.deleteInbox)
 
 // LIKE FORUM
 app.get('/likeforum/data/id/:id', middleware.checkToken, like_forum.getLikeForum)
@@ -123,7 +123,9 @@ app.post('/users/update', middleware.checkToken, users.updateUsers)
 app.post('/users/delete', middleware.checkToken, users.deleteUsers)
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+const PORT2 = process.env.PORT || 3002;
+
+app.listen(PORT2, () => {
   console.log(
     `App running on port ${port}.`
   )
