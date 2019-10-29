@@ -120,20 +120,9 @@ const getForumByName = (request, response) => {
 const createForum = (request, response) => {
     const { forum_title, forum_content, forum_img, forum_category } = request.body
     var _currentid;
+    var current_time;
 
-    pool.query('SELECT * FROM course ORDER BY course_id DESC LIMIT 1', (error, result) => {
-        if(result.rowCount == 0)
-        {
-            _currentid = "FR0001";
-        }
-        else
-        {
-            var currentphase = result.rows[0].course_id;
-            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-            _currentid = "FR" + String(currentnumber).padStart(4, '0');
-        }
-
-    pool.query('INSERT INTO forum (forum_id, forum_title, forum_creation_date, forum_content, forum_img, forum_category) VALUES ($1, $2, NOW(), $3, $4, $5)', [_currentid, forum_title, forum_content, forum_img, forum_category], (error, result) =>{
+    pool.query('SELECT NOW() AT TIME ZONE \'Asia/Jakarta\'', (error, result) => {
         if(error)
         {
             return response.status(500).json({
@@ -141,13 +130,40 @@ const createForum = (request, response) => {
                 "message": "Server error"
             });
         }
+        else
+        {
+            current_time = result.rows[0].timezone;
+            pool.query('SELECT * FROM course ORDER BY course_id DESC LIMIT 1', (error, result) => {
+                if(result.rowCount == 0)
+                {
+                    _currentid = "FR0001";
+                }
+                else
+                {
+                    var currentphase = result.rows[0].course_id;
+                    var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+                    _currentid = "FR" + String(currentnumber).padStart(4, '0');
+                }
+        
+                pool.query('INSERT INTO forum (forum_id, forum_title, forum_creation_date, forum_content, forum_img, forum_category) VALUES ($1, $2, $3, $4, $5, $6)', [_currentid, forum_title, current_time, forum_content, forum_img, forum_category], (error, result) =>{
+                    if(error)
+                    {
+                        return response.status(500).json({
+                            "success": false,
+                            "message": "Server error"
+                        });
+                    }
+            
+                    response.status(201).json({
+                        "success": true,
+                        "message": "Forum has been added"
+                    });
+                });
+            });
+        }
+    });
 
-        response.status(201).json({
-            "success": true,
-            "message": "Forum has been added"
-        });
-      })
-    })
+    
 }
 
 const updateForum = (request, response) => {

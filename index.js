@@ -49,14 +49,14 @@ app.post('/course/create', middleware.checkToken, course.createCourse)
 app.post('/course/update', middleware.checkToken, course.updateCourse)
 app.post('/course/delete', middleware.checkToken, course.deleteCourse)
 
-// // EVENT
-// app.get('/event/data', middleware.checkToken, event.getEvent)
-// app.get('/event/data/id/:id', middleware.checkToken, event.getEventById)
-// app.get('/event/data/name/:id', middleware.checkToken, event.getEventByName)
-// app.get('/event/data/cat/:id', event.getEventByCategory)
-// app.post('/event/create', middleware.checkToken, event.createEvent)
-// app.post('/event/update/:id', middleware.checkToken, event.updateEvent)
-// app.post('/event/delete', middleware.checkToken, event.deleteEvent)
+// EVENT
+app.get('/event/data', middleware.checkToken, event.getEvent)
+app.get('/event/data/name/:id', middleware.checkToken, event.getEventByName)
+app.get('/event/data/price/:id', middleware.checkToken, event.getEventByPrice)
+app.get('/event/data/cat/:id', middleware.checkToken, event.getEventByCategory)
+app.post('/event/create', middleware.checkToken, event.createEvent)
+app.post('/event/update/:id', middleware.checkToken, event.updateEvent)
+app.post('/event/delete', middleware.checkToken, event.deleteEvent)
 
 // FORUM
 app.get('/forum/data', middleware.checkToken, forum.getForum)
@@ -72,12 +72,11 @@ app.get('/forumcomment/data/id/:id', middleware.checkToken, forum_comment.getFor
 app.post('/forumcomment/create', middleware.checkToken, forum_comment.createForumComment)
 app.post('/forumcomment/delete', middleware.checkToken, forum_comment.deleteForumComment)
 
-// // INBOX
-// app.get('/inbox/data', inbox.getInbox)
-// app.post('/inbox/data', inbox.getInboxById)
-// app.post('/inbox/create', inbox.createInbox)
-// app.post('/inbox/update/:id', inbox.updateInbox)
-// app.post('/inbox/delete/:id', inbox.deleteInbox)
+// INBOX
+app.get('/inbox/data', middleware.checkToken, inbox.getInbox)
+app.post('/inbox/data/id/:id', middleware.checkToken, inbox.getInboxById)
+app.post('/inbox/create', middleware.checkToken, inbox.createInbox)
+app.post('/inbox/delete/:id', middleware.checkToken, inbox.deleteInbox)
 
 // LIKE FORUM
 app.get('/likeforum/data/id/:id', middleware.checkToken, like_forum.getLikeForum)
@@ -120,6 +119,7 @@ app.get('/users/data/firstname/:id', middleware.checkToken, users.getUsersByFirs
 app.get('/users/data/lastname/:id', middleware.checkToken,users.getUsersByLastName)
 // create user is on register endpoint
 app.post('/users/update', middleware.checkToken, users.updateUsers)
+app.post('/users/update/membership', middleware.checkToken, users.upgradeUsers)
 app.post('/users/delete', middleware.checkToken, users.deleteUsers)
 
 const PORT = process.env.PORT || 3001;

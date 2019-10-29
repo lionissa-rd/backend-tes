@@ -9,6 +9,10 @@ const register = (request, response) => {
     const password = bcrypt.hashSync(String(request.body.userPassword))
     const first_name = request.body.userFirstName
     const last_name = request.body.userLastName
+    var _message = "Welcome to The Entepreneur Society, " + first_name + " " + last_name;
+    var _currentid;
+    var user_id;
+    var current_time;
 
     if(!email || !password || !first_name || !last_name)
     {
@@ -21,6 +25,11 @@ const register = (request, response) => {
     }
 
     pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
+        if (err)
+        {
+            console.log(res)
+        }
+
         if(res.rowCount !== 0)
         {
             return response.status(200).json({
@@ -31,45 +40,98 @@ const register = (request, response) => {
         }
         else
         {
-            pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (err, res) => {
-                if (err) {
-                    console.log(res)
-                }
-        
-                if (res.rowCount == 0) {
-                    _currentid = "US0001";
-                }
-                else {
-                    var currentphase = res.rows[0].user_id;
-                    var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
-                    _currentid = "US" + String(currentnumber).padStart(4, '0');
-                }
-                console.log(_currentid);
-        
-                pool.query('INSERT INTO users (user_id, user_email, user_password, user_creation_date, user_first_name, user_last_name) VALUES ($1, $2, $3, NOW(), $4, $5)', [_currentid, email, password, first_name, last_name], (err, res) => {
-                    if (err) return res.status(500).json({
+            pool.query('SELECT NOW() AT TIME ZONE \'Asia/Jakarta\'', (err, res) => {
+                if (err)
+                {
+                    return res.status(500).json({
                         "success": false,
                         "message": "Server error!"
                     });
+                }
+                else
+                {
+                    current_time = res.rows[0].timezone;
+                    pool.query('SELECT * FROM users ORDER BY user_id DESC LIMIT 1', (err, res) => {
+                        if (err) {
+                            return res.status(500).json({
+                                    "success": false,
+                                    "message": "Server error!"
+                                });
+                        }
+                
+                        if (res.rowCount == 0) {
+                            _currentid = "US0001";
+                        }
+                        else {
+                            var currentphase = res.rows[0].user_id;
+                            var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+                            _currentid = "US" + String(currentnumber).padStart(4, '0');
+                        }
+                        console.log(_currentid);
         
-                    pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
-                        if (err) return res.status(500).json({
-                            "succcess": false,
-                            "message": "Server error!"
+                        user_id = _currentid
+                
+                        pool.query('INSERT INTO users (user_id, user_email, user_password, user_creation_date, user_first_name, user_last_name) VALUES ($1, $2, $3, $4, $5, $6)', [_currentid, email, password, current_time, first_name, last_name], (err, res) => {
+                            if (err) {
+                                return res.status(500).json({
+                                    "success": false,
+                                    "message": "Server error!"
+                                });
+                            }
+                
+                            pool.query('SELECT * FROM users WHERE user_email = $1', [email], (err, res) => {
+                                if (err) return res.status(500).json({
+                                    "succcess": false,
+                                    "message": "Server error!"
+                                });
+        
+                                const expiresIn = 24 * 60 * 60;
+                                const accessToken = jwt.sign({ id: _currentid }, config.secret, {
+                                    expiresIn: expiresIn
+                                });
+        
+                                
+                                //adding a message to inbox
+                                pool.query('SELECT * FROM inbox ORDER BY inbox_id DESC LIMIT 1', (error, result) => {
+                                    if(result.rowCount == 0)
+                                    {
+                                        _currentid = "IN0001";
+                                    }
+                                    else
+                                    {
+                                        var currentphase = result.rows[0].inbox_id;
+                                        var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+                                        _currentid = "IN" + String(currentnumber).padStart(4, '0');
+                                    }
+                            
+                                    pool.query('INSERT INTO inbox (inbox_id, inbox_msg, inbox_datetime, user_id) VALUES ($1, $2, $3, $4)', [_currentid, _message, current_time, user_id], (error, result) => {
+                                        if(error)
+                                        {
+                                            return response.status(500).json({
+                                                "success": false,
+                                                "message": "Server error"
+                                            });
+                                        }
+                                
+                                            // response.status(201).json({
+                                            //     "success": true,
+                                            //     "message": "Inbox has been added"
+                                            // })
+        
+                                            response.status(200).json({
+                                                "success": true,
+                                                "auth": true, 
+                                                "token": accessToken
+                                            });
+                                        });
+                                });
+                            });
                         });
-
-                        const expiresIn = 24 * 60 * 60;
-                        const accessToken = jwt.sign({ id: _currentid }, config.secret, {
-                            expiresIn: expiresIn
-                        });
-
-                        response.status(200).json({
-                            "sucesss": true,
-                            "auth": true, 
-                            "token": accessToken});
                     });
-                });
-            });
+
+                }
+            })
+            
         }
     });
 }
@@ -127,7 +189,8 @@ const login = (request, response) => {
                     "success": true,
                     "auth": true,
                     "access_token":  accessToken, 
-                    "expires_in":  expiresIn});
+                    "expires_in":  expiresIn
+                });
             }
         });
     }

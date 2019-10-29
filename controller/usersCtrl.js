@@ -167,7 +167,7 @@ const getUsersByLastName = (request, response) => {
 //            _currentid = "US" + String(currentnumber).padStart(4, '0');
 //        }
 
-//    pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7, $8, $9, $10)', [_currentid, user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password], (error, result) => {
+//    pool.query('INSERT INTO users VALUES ($1, $2, $3, $4, (SELECT NOW() AT TIME ZONE \' ASIA/JAKARTA\'), $5, $6, $7, $8, $9, $10)', [_currentid, user_email, user_username, user_fullname, user_admin_status, ul_id, ub_id, inbox_id, user_status_premium, user_password], (error, result) => {
 //        if(error)
 //        {
 //            throw error
@@ -200,6 +200,67 @@ const updateUsers = (request, response) => {
     })
 }
 
+const upgradeUsers = (request, response) => {
+    const {user_id} = request.body
+    var _currentid;
+    var _message = "Your account has been upgraded to Premium";
+    var current_time;
+
+    pool.query('SELECT NOW() AT TIME ZONE \'Asia / Jakarta\'', (error, result) => {
+        if(error)
+        {
+            return response.status(500).json({
+                "success": false,
+                "message": "Server error"
+            });
+        }
+        else
+        {
+            current_time = result.rows[0].timezone;
+            pool.query('UPDATE users SET user_membership = \'Premium\' WHERE user_id = $1', [user_id], (error, result) => {
+                if(error)
+                {
+                    return response.status(500).json({
+                        "success": false,
+                        "message": "Server error"
+                    });
+                }
+        
+                // adding to inbox
+                pool.query('SELECT * FROM inbox ORDER BY inbox_id DESC LIMIT 1', (error, result) => {
+                    if(result.rowCount == 0)
+                    {
+                        _currentid = "IN0001";
+                    }
+                    else
+                    {
+                        var currentphase = result.rows[0].inbox_id;
+                        var currentnumber = parseInt(String(currentphase).substring(2, 6)) + 1;
+                        _currentid = "IN" + String(currentnumber).padStart(4, '0');
+                    }
+        
+                    pool.query('INSERT INTO inbox (inbox_id, inbox_msg, inbox_datetime, user_id) VALUES ($1, $2, $3, $4)', [_currentid, _message, current_time, user_id], (error, result) => {
+                        if(error)
+                        {
+                            return response.status(500).json({
+                                "success": false,
+                                "message": "Server error"
+                            });
+                        }
+        
+                        response.status(200).json({
+                            "success": true,
+                            "message": "User has been upgraded"
+                        });
+                    });
+                });
+            });
+        }
+    });
+
+    
+}
+
 const deleteUsers = (request, response) => {
     const {user_id} = request.body
 
@@ -228,5 +289,6 @@ module.exports = {
     getUsersByFirstName,
     getUsersByLastName,
     updateUsers,
+    upgradeUsers,
     deleteUsers
 }
