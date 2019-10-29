@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
 const middleware = require('./middleware')
-const port = 3001
+const port = 3002
 const router = express.Router();
 
 const auth = require('./auth/authCtrl')
@@ -127,7 +127,7 @@ const PORT2 = process.env.PORT || 3002;
 
 app.listen(PORT2, () => {
   console.log(
-    `App running on port ${port}.`
+    `App running on port ${port2}.`
   )
 })
 
