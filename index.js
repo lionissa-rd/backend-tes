@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
 const middleware = require('./middleware')
-const port = 3002
+const port = 3001
 const router = express.Router();
 
 const auth = require('./auth/authCtrl')
@@ -125,9 +125,9 @@ app.post('/users/delete', middleware.checkToken, users.deleteUsers)
 const PORT = process.env.PORT || 3001;
 const PORT2 = process.env.PORT || 3002;
 
-app.listen(PORT2, () => {
+app.listen(PORT1, () => {
   console.log(
-    `App running on port ${port2}.`
+    `App running on port ${port1}.`
   )
 })
 
