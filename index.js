@@ -49,14 +49,14 @@ app.post('/course/create', middleware.checkToken, course.createCourse)
 app.post('/course/update', middleware.checkToken, course.updateCourse)
 app.post('/course/delete', middleware.checkToken, course.deleteCourse)
 
-// EVENT
-app.get('/event/data', middleware.checkToken, event.getEvent)
-app.get('/event/data/id/:id', middleware.checkToken, event.getEventById)
-app.get('/event/data/name/:id', middleware.checkToken, event.getEventByName)
-app.get('/event/data/cat/:id', event.getEventByCategory)
-app.post('/event/create', middleware.checkToken, event.createEvent)
-app.post('/event/update/:id', middleware.checkToken, event.updateEvent)
-app.post('/event/delete', middleware.checkToken, event.deleteEvent)
+// // EVENT
+// app.get('/event/data', middleware.checkToken, event.getEvent)
+// app.get('/event/data/id/:id', middleware.checkToken, event.getEventById)
+// app.get('/event/data/name/:id', middleware.checkToken, event.getEventByName)
+// app.get('/event/data/cat/:id', event.getEventByCategory)
+// app.post('/event/create', middleware.checkToken, event.createEvent)
+// app.post('/event/update/:id', middleware.checkToken, event.updateEvent)
+// app.post('/event/delete', middleware.checkToken, event.deleteEvent)
 
 // FORUM
 app.get('/forum/data', middleware.checkToken, forum.getForum)
