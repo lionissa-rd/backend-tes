@@ -1,12 +1,3 @@
-# tes
-Project Tematik - T.E.S. (The Entrepreneurs Society)
-
-1. Fork this repo
-2. git clone this repo
-3. edit git remote
-4. npm install / yarn
-5. Happy Coding! :)
-
 # The Entrepreneur Society
 
 ### Comment/Notes
@@ -55,7 +46,7 @@ Response Value
   access_token : generated with JWT middleware, use this for session and authenticate each time fetching,
 }
 ```
-<br/>
+# Login
 - [X] Login (LOGIN SCENE)
 
 | A | B |
@@ -82,10 +73,249 @@ Response Value
 
 }
 ```
+# Menu Access
+
+- [X] Home (HOME SCENE)
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /homescene  |
+| METHOD      | GET |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  event: data rows,
+  user: user profile data (see users collection),
+  (if fails)
+  message: string,
+
+}
+```
+# Profile
+- [X] Profile (ACCOUNT SCENE)
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /accountscene  |
+| METHOD      | GET |
+| Description | Endpoint used to access user profile page |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data:[
+    {
+      "user_email": string,
+      "user_username": string,
+      "user_creation_date": date,
+      "ub_id": string,
+      "inbox_id": string,
+      "user_avatar": string,
+      "user_first_name": string,
+      "user_last_name": string,
+      "user_role": enum (Admin, User),
+      "user_membership": enum (Basic, Premium),
+    }
+  ]
+
+}
+```
+# Event
+
+- [X] Event
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /event/data  |
+| METHOD      | GET |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data: (array of ticket data)[
+    {
+      ticket_id: string,
+      user_id: string,
+      event_id: string,
+      ticket_qty: integer,
+      ticket_date: date
+    },
+    {
+      Other ticket data....
+    },
+  ]
+
+}
+```
+# Ticket
+
+- [X] Ticket
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /ticket/data  |
+| METHOD      | GET |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data: (array of ticket data)[
+    {
+      ticket_id: string,
+      user_id: string,
+      event_id: string,
+      ticket_qty: integer,
+      ticket_date: date
+    },
+    {
+      Other ticket data....
+    },
+  ]
+
+}
+```
+# Forum
+
+- [X] Forum
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forum/data  |
+| METHOD      | GET |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: (array of forum data)[
+        {
+            forum_id: string,
+            forum_title: string,
+            forum_creation_date: date,
+            forum_content: string,
+            forum_img: string,
+            forum_category: string,
+        }
+    ]
+}
+```
+# Forum create
+- [X] FORUM CREATE
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forum/create  |
+| METHOD      | POST |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+{
+  forum_title: string,
+  forum_content: string,
+  forum_category: string,
+}
+```
+
+Response Value
+```
+{
+    success: true,
+    message: string,
+}
+```
+
+# Forum Comment
+
+- [X] Forum Comment
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forumcomment/data  |
+| METHOD      | GET |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: (array of forum data)[
+            {
+                fc_id: string,
+                fc_content: string,
+                fc_creation_date: date,
+                user_id: string,
+                forum_id: string
+            }
+    ]
+}
+```
+# Forum comment
+- [X] FORUM COMMENT CREATE
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forumcomment/create  |
+| METHOD      | POST |
+| Description | Endpoint used to access home page |
+
+Request Body
+```
+{
+  fc_content: string,
+}
+```
+Ini pastikan data2 lain bisa langsung fetch dari user yang login
+
+Response Value
+```
+{
+    success: true,
+    message: string,
+}
+
+```
+Like forum mungkin masih salah karena pas mau insert error. Untuk get mohon klarifikasi caranya, tulis aja di readme ini bagian bawah.
+Ticket create belom dites karena event masih dikomen.
 */
-Notes yang perlu diubah/pastikan
-Di mana bakal simpen gambar-gambar?
-Di response Value:
-success ---> success
 
 /*
