@@ -32,7 +32,7 @@ const getLikeForumComment = (request, response) => {
 }
 
 const createLikeForumComment = (request, response) => {
-    const {forum_id, fc_id, user_id} = request.body
+    const {forum_id, fc_id} = request.body
     var _currentid;
 
     pool.query('SELECT * FROM likes_forum_comment ORDER BY lfc_id DESC LIMIT 1', (error, result) => {
@@ -47,7 +47,7 @@ const createLikeForumComment = (request, response) => {
             _currentid = "LC" + String(currentnumber).padStart(4, '0');
         }
 
-    pool.query('INSERT INTO likes_forum_comment (lfc_id, forum_id, fc_id, user_id) VALUES ($1, $2, $3, $4)', [_currentid, forum_id, fc_id, user_id], (error, result) =>{
+    pool.query('INSERT INTO likes_forum_comment (lfc_id, forum_id, fc_id, user_id) VALUES ($1, $2, $3, $4)', [_currentid, forum_id, fc_id, request.id], (error, result) =>{
         if(error)
         {
             return response.status(500).json({
@@ -66,9 +66,9 @@ const createLikeForumComment = (request, response) => {
 
 // harus ganti POST
 const deleteLikeForumComment = (request, response) => {
-    const {user_id, fc_id } = request.body
+    const {fc_id } = request.body
 
-    pool.query('DELETE FROM likes_forum_comment WHERE user_id = $1 AND fc_id = $2', [user_id, fc_id], (error, result) =>{
+    pool.query('DELETE FROM likes_forum_comment WHERE user_id = $1 AND fc_id = $2', [request.id, fc_id], (error, result) =>{
         if(error)
         {
             return response.status(500).json({

@@ -32,7 +32,7 @@ const getLikeForum = (request, response) => {
 }
 
 const createLikeForum = (request, response) => {
-    const {forum_id, user_id} = request.body
+    const {forum_id} = request.body
     var _currentid;
 
     pool.query('SELECT * FROM likes_forum ORDER BY lf_id DESC LIMIT 1', (error, result) => {
@@ -47,7 +47,7 @@ const createLikeForum = (request, response) => {
             _currentid = "LF" + String(currentnumber).padStart(4, '0');
         }
 
-    pool.query('INSERT INTO likes_forum (lc_id, forum_id, user_id) VALUES ($1, $2, $3)', [_currentid, forum_id, user_id], (error, result) =>{
+    pool.query('INSERT INTO likes_forum (lc_id, forum_id, user_id) VALUES ($1, $2, $3)', [_currentid, forum_id, request.id], (error, result) =>{
         if(error)
         {
             return response.status(500).json({
@@ -66,9 +66,9 @@ const createLikeForum = (request, response) => {
 
 // harus ganti POST
 const deleteLikeForum = (request, response) => {
-    const {user_id, forum_id} = request.body
+    const {forum_id} = request.body
 
-    pool.query('DELETE FROM likes_forum WHERE user_id = $1 AND forum_id = $2', [user_id], (error, result) =>{
+    pool.query('DELETE FROM likes_forum WHERE user_id = $1 AND forum_id = $2', [request.id, forum_id], (error, result) =>{
         if(error)
         {
             return response.status(500).json({
