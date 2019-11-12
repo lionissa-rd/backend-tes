@@ -91,8 +91,30 @@ Response Value
 ```
 {
   success: boolean,
-  event: data rows,
-  user: user profile data (see users collection),
+  event: [
+    {
+      event_id: string,
+      event_name: string,
+      event_description: string,
+      event_img: string,
+      event_category: enum (WORKSHOP, SEMINAR),
+      event_price: int,
+      event_date: date,
+      event_place: string
+    }
+  ],
+  user: [
+    {
+      user_email: string,
+      user_creation_date: string,
+      inbox_id: string,
+      user_avatar: string,
+      user_first_name: string,
+      user_last_name: string,
+      user_role: enum (Admin, User),
+      user_membership: enum (Basic, Premium)
+    }
+  ],
   (if fails)
   message: string,
 
@@ -119,9 +141,7 @@ Response Value
   data:[
     {
       "user_email": string,
-      "user_username": string,
       "user_creation_date": date,
-      "ub_id": string,
       "inbox_id": string,
       "user_avatar": string,
       "user_first_name": string,
@@ -133,6 +153,89 @@ Response Value
 
 }
 ```
+
+# User
+ - [X] Get User
+ 
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /users/data  |
+| METHOD      | GET |
+| Description | Endpoint used to get all users' data |
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data:[
+    {
+      "user_email": string,
+      "user_creation_date": date,
+      "inbox_id": string,
+      "user_avatar": string,
+      "user_first_name": string,
+      "user_last_name": string,
+      "user_role": enum (Admin, User),
+      "user_membership": enum (Basic, Premium)
+    }
+  ]
+
+}
+```
+
+- [X] Update Users
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /users/update  |
+| METHOD      | GET |
+| Description | Endpoint used to update the membership status of user|
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data:[
+    {
+      user_email: string,
+      user_role: enum (Admin, User),
+      user_membership: enum (Basic, Premium)
+    }
+  ],
+  message: string
+}
+```
+
+- [X] Delete Users
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /users/delete  |
+| METHOD      | GET |
+| Description | Endpoint used to delete the user|
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+  success: boolean,
+  message: string
+}
+```
+
 # Event
 
 - [X] Get Event
@@ -161,7 +264,8 @@ Response Value
       event_category: string,
       event_price: int, 
       available_seat: int,
-      event_date: date
+      event_date: date,
+      event_place: string
     }
   ]
 
@@ -184,7 +288,8 @@ Request Body
   event_category: string,
   event_price: int,
   available_seat: int,
-  event_date: date
+  event_date: date,
+  event_place: string
 }
 ```
 
