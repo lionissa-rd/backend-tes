@@ -43,7 +43,7 @@ Response Value
 {
   success: boolean,
   auth: boolean,
-  access_token : generated with JWT middleware, use this for session and authenticate each time fetching,
+  token : generated with JWT middleware, use this for session and authenticate each time fetching,
 }
 ```
 # Login
