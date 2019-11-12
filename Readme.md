@@ -136,13 +136,13 @@ Response Value
 ```
 # Event
 
-- [X] Event
+- [X] Get Event
 
 | A | B |
 | ----------- | ------------- |
 | FETCH       | /event/data  |
 | METHOD      | GET |
-| Description | Endpoint used to access home page |
+| Description | Endpoint used to get all event |
 
 Request Body
 ```
@@ -153,30 +153,93 @@ Response Value
 ```
 {
   success: boolean,
-  data: (array of ticket data)[
+  data: [
     {
-      ticket_id: string,
-      user_id: string,
       event_id: string,
-      ticket_qty: integer,
-      ticket_date: date
-    },
-    {
-      Other ticket data....
-    },
+      event_name: string,
+      event_details: string,
+      event_img: string,
+      event_category: string,
+      event_price: int, 
+      available_seat: int,
+      event_date: date
+    }
   ]
 
 }
 ```
+- [X] Create Event
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /event/create  |
+| METHOD      | POST |
+| Description | Endpoint used to create an event |
+
+Request Body
+```
+{
+  event_name: string,
+  event_details: string,
+  event_img: string,
+  event_category: string,
+  event_price: int,
+  available_seat: int,
+  event_date: string
+}
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data: [
+    {
+      event_id: string,
+      event_name: string,
+      event_details: string,
+      event_img: string,
+      event_category: string,
+      event_price: int, 
+      available_seat: int,
+      event_date: date
+    }
+  ]
+
+}
+```
+
+- [X] Delete Event
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /event/delete |
+| METHOD      | POST |
+| Description | Endpoint used to delete certain event|
+
+Request Body
+```
+ event_id: string
+```
+
+Response Value
+```
+{
+  success: boolean,
+  message: string
+}
+```
+
+
 # Ticket
 
-- [X] Ticket
+- [X] Get Ticket
 
 | A | B |
 | ----------- | ------------- |
 | FETCH       | /ticket/data  |
 | METHOD      | GET |
-| Description | Endpoint used to access home page |
+| Description | Endpoint used to get all ticket available |
 
 Request Body
 ```
@@ -187,30 +250,115 @@ Response Value
 ```
 {
   success: boolean,
-  data: (array of ticket data)[
+  data: [
     {
       ticket_id: string,
       user_id: string,
       event_id: string,
       ticket_qty: integer,
       ticket_date: date
-    },
-    {
-      Other ticket data....
-    },
+    }
   ]
 
 }
 ```
-# Forum
 
-- [X] Forum
+- [X] Get Ticket by Ticket ID
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /ticket/data/user/:id|
+| METHOD      | GET |
+| Description | Endpoint used to get all ticket owned by an user|
+
+Request Body
+```
+None. Replace :id with user_id instead|
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data: [
+    {
+      ticket_id: string,
+      user_id: string,
+      event_id: string,
+      ticket_qty: integer,
+      ticket_date: date
+    }
+  ]
+
+}
+```
+
+- [X] Create Ticket
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /ticket/create|
+| METHOD      | POST|
+| Description | Endpoint used to create ticket|
+
+Request Body
+```
+{
+  event_id: string,
+  ticket_qty: int
+}
+```
+
+Response Value
+```
+{
+  success: boolean,
+  data: [
+    {
+      ticket_id: string,
+      user_id: string,
+      event_id: string,
+      ticket_qty: integer,
+      ticket_date: date
+    }
+  ],
+  message: Ticket has been successfully bought.
+
+}
+```
+
+- [X] Delete Ticket
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /ticket/delete|
+| METHOD      | POST|
+| Description | Endpoint used to delete ticket|
+
+Request Body
+```
+{
+  ticket_id: string
+}
+```
+
+Response Value
+```
+{
+  success: boolean,
+  message: string
+
+}
+```
+
+# Inbox
+- [X] Get Inbox (Messages)
 
 | A | B |
 | ----------- | ------------- |
 | FETCH       | /forum/data  |
 | METHOD      | GET |
-| Description | Endpoint used to access home page |
+| Description | Endpoint used to get all inbox data|
 
 Request Body
 ```
@@ -221,7 +369,66 @@ Response Value
 ```
 {
     success: boolean,
-    data: (array of forum data)[
+    data: [
+        {
+          inbox_id: string,
+          inbox_msg: string,
+          inbox_datetime: date,
+          user_id: string
+        }
+    ]
+}
+```
+
+- [X] Create Inbox (Messages)
+ Create Message is automatically done with:
+  - Register
+  - Create Ticket
+  
+- [X] Delete Inbox (Messages)
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /inbox/delete|
+| METHOD      | POST |
+| Description | Endpoint used to delete a message in inbox|
+
+Request Body
+```
+{
+  inbox_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
+    message: string,
+}
+```
+ 
+
+# Forum
+
+- [X] Get All Forum
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forum/data  |
+| METHOD      | GET |
+| Description | Endpoint used to get all forum data|
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: [
         {
             forum_id: string,
             forum_title: string,
@@ -233,21 +440,22 @@ Response Value
     ]
 }
 ```
-# Forum create
-- [X] FORUM CREATE
+
+- [X] Create Forum
 
 | A | B |
 | ----------- | ------------- |
 | FETCH       | /forum/create  |
 | METHOD      | POST |
-| Description | Endpoint used to access home page |
+| Description | Endpoint used to create forum|
 
 Request Body
 ```
 {
   forum_title: string,
   forum_content: string,
-  forum_category: string,
+  forum_img: string,
+  forum_category: string
 }
 ```
 
@@ -255,19 +463,52 @@ Response Value
 ```
 {
     success: true,
+    data: [
+      {
+        forum_id: string,
+        forum_title: string,
+        forum_creation_date: date,
+        forum_content: string,
+        forum_img: string,
+        forum_category: string
+      }
+    ]
+    message: string,
+}
+```
+
+- [X] Delete Forum
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forum/delete|
+| METHOD      | POST |
+| Description | Endpoint used to create forum|
+
+Request Body
+```
+{
+  forum_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
     message: string,
 }
 ```
 
 # Forum Comment
 
-- [X] Forum Comment
+- [X] Get Forum Comment
 
 | A | B |
 | ----------- | ------------- |
-| FETCH       | /forumcomment/data  |
+| FETCH       | /forumcomment/data|
 | METHOD      | GET |
-| Description | Endpoint used to access home page |
+| Description | Endpoint used to get all forum comments|
 
 Request Body
 ```
@@ -278,7 +519,7 @@ Response Value
 ```
 {
     success: boolean,
-    data: (array of forum data)[
+    data: [
             {
                 fc_id: string,
                 fc_content: string,
@@ -289,33 +530,235 @@ Response Value
     ]
 }
 ```
-# Forum comment
-- [X] FORUM COMMENT CREATE
+
+- [X] Get Forum Comment by Forum ID
 
 | A | B |
 | ----------- | ------------- |
-| FETCH       | /forumcomment/create  |
-| METHOD      | POST |
-| Description | Endpoint used to access home page |
+| FETCH       | /forumcomment/data/id/:id|
+| METHOD      | GET |
+| Description | Endpoint used to get forum's comment by Forum ID|
+
+Request Body
+```
+None. Put forum_id in the :id.
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: [
+            {
+                fc_id: string,
+                fc_content: string,
+                fc_creation_date: date,
+                user_id: string,
+                forum_id: string
+            }
+    ]
+}
+```
+
+- [X] Create Forum Comment
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forumcomment/create|
+| METHOD      | POST|
+| Description | Endpoint used to create forum comment|
 
 Request Body
 ```
 {
   fc_content: string,
+  forum_id: string
 }
 ```
-Ini pastikan data2 lain bisa langsung fetch dari user yang login
 
 Response Value
 ```
 {
-    success: true,
-    message: string,
+    success: boolean,
+    data: [
+            {
+                fc_id: string,
+                fc_content: string,
+                fc_creation_date: date,
+                user_id: string,
+                forum_id: string
+            }
+    ]
 }
-
 ```
-Like forum mungkin masih salah karena pas mau insert error. Untuk get mohon klarifikasi caranya, tulis aja di readme ini bagian bawah.
-Ticket create belom dites karena event masih dikomen.
-*/
 
-/*
+- [X] Delete Forum Comment
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forumcomment/delete|
+| METHOD      | POST|
+| Description | Endpoint used to create forum comment|
+
+Request Body
+```
+{
+  fc_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
+    message: string
+}
+```
+
+# Like Forum
+- [X] Get Like Forum
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /likeforum/data/id/:id|
+| METHOD      | GET|
+| Description | Endpoint used to get all the like in a forum|
+
+Request Body
+```
+None. Put forum_id in :id
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: string
+}
+```
+
+- [X] Create Like Forum
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /likeforum/create|
+| METHOD      | POST|
+| Description | Endpoint used to create a like in a forum|
+
+Request Body
+```
+{
+  forum_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: [
+      {
+        lf_id: string,
+        forum_id: string
+      }
+    ]
+}
+```
+
+- [X] Delete Like Forum
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /likeforum/delete|
+| METHOD      | POST|
+| Description | Endpoint used to create a like in a forum|
+
+Request Body
+```
+{
+  forum_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
+    message: string
+}
+```
+
+# Like Forum Comment
+- [X] Get Like Forum Comment
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /likeforumcomment/data/id/:id|
+| METHOD      | GET|
+| Description | Endpoint used to get all the like in a comment in a forum|
+
+Request Body
+```
+None. Put fc_id in :id
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: string
+}
+```
+
+- [X] Create Like Forum Comment
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /likeforumcomment/create|
+| METHOD      | POST|
+| Description | Endpoint used to create a like in a comment in a forum|
+
+Request Body
+```
+{
+  fc_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: [
+      {
+        lfc_id: string,
+        forum_id: string,
+        fc_id: string
+      }
+    ],
+    message: string
+}
+```
+
+- [X] Delete Like Forum Comment
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /likeforumcomment/delete|
+| METHOD      | POST|
+| Description | Endpoint used to delete a like in a comment in a forum|
+
+Request Body
+```
+{
+  fc_id: string
+}
+```
+
+Response Value
+```
+{
+    success: boolean,
+    message: string
+}
+```
