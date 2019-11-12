@@ -201,7 +201,8 @@ Response Value
       event_category: string,
       event_price: int, 
       available_seat: int,
-      event_date: date
+      event_date: date,
+      event_place: string
     }
   ],
   message: string
