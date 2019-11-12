@@ -142,7 +142,7 @@ Response Value
 | ----------- | ------------- |
 | FETCH       | /event/data  |
 | METHOD      | GET |
-| Description | Endpoint used to get all event |
+| Description | Endpoint used to get all event. Arranged based on Event's Date |
 
 Request Body
 ```
@@ -185,7 +185,7 @@ Request Body
   event_category: string,
   event_price: int,
   available_seat: int,
-  event_date: string
+  event_date: date
 }
 ```
 
@@ -204,7 +204,8 @@ Response Value
       available_seat: int,
       event_date: date
     }
-  ]
+  ],
+  message: string
 
 }
 ```
@@ -273,7 +274,7 @@ Response Value
 
 Request Body
 ```
-None. Replace :id with user_id instead|
+None. Replace :id with user_id instead
 ```
 
 Response Value
@@ -316,7 +317,6 @@ Response Value
   data: [
     {
       ticket_id: string,
-      user_id: string,
       event_id: string,
       ticket_qty: integer,
       ticket_date: date
@@ -358,7 +358,7 @@ Response Value
 | ----------- | ------------- |
 | FETCH       | /forum/data  |
 | METHOD      | GET |
-| Description | Endpoint used to get all inbox data|
+| Description | Endpoint used to get all message data|
 
 Request Body
 ```
@@ -379,6 +379,35 @@ Response Value
     ]
 }
 ```
+
+- [X] Get Inbox by Id (Messages)
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forum/data/id/:id  |
+| METHOD      | GET |
+| Description | Endpoint used to get all message data based on User ID|
+
+Request Body
+```
+None. Repplace :id with user_id instead.
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: [
+        {
+          inbox_id: string,
+          inbox_msg: string,
+          inbox_datetime: date,
+          user_id: string
+        }
+    ]
+}
+```
+
 
 - [X] Create Inbox (Messages)
  Create Message is automatically done with:
@@ -418,6 +447,37 @@ Response Value
 | FETCH       | /forum/data  |
 | METHOD      | GET |
 | Description | Endpoint used to get all forum data|
+
+Request Body
+```
+None, just make sure to login first with valid credentials.
+```
+
+Response Value
+```
+{
+    success: boolean,
+    data: [
+        {
+            forum_id: string,
+            forum_title: string,
+            forum_creation_date: date,
+            forum_content: string,
+            forum_img: string,
+            forum_category: string,
+        }
+    ]
+}
+```
+
+
+- [X] Get All Forum (Latest)
+
+| A | B |
+| ----------- | ------------- |
+| FETCH       | /forum/data/latest  |
+| METHOD      | GET |
+| Description | Endpoint used to get 3 newest forum by date|
 
 Request Body
 ```
@@ -588,7 +648,8 @@ Response Value
                 user_id: string,
                 forum_id: string
             }
-    ]
+    ],
+    message: string
 }
 ```
 
@@ -661,7 +722,8 @@ Response Value
         lf_id: string,
         forum_id: string
       }
-    ]
+    ],
+    message: string
 }
 ```
 
