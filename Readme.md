@@ -10,13 +10,12 @@
 | ---- | ---- | ----------- |
 | user_id  | string | Auto-generated |
 | user_email | string | Unique, no user will have the same email |
-| user_username | string | Unique, no user will have the same email |
 | user_password | string | password of account which has passed frontend verification, hash(password) |
 | user_avatar | string/null | Display image in url |
 | user_first_name | string | First name for user |
 | user_last_name | string | Last name for user |
-| user_role | string : enum | Either 'Admin' or 'User' |
-| membership | string : enum | Either 'Basic' or 'Premium' |
+| user_role | string : enum | Either 'Admin' or 'User' | Can't be null |
+| membership | string : enum | Either 'Basic' or 'Premium' | Can't be null |
 
 # Authentication
 
@@ -157,7 +156,7 @@ Response Value
     {
       event_id: string,
       event_name: string,
-      event_details: string,
+      event_description: string,
       event_img: string,
       event_category: string,
       event_price: int, 
@@ -180,7 +179,7 @@ Request Body
 ```
 {
   event_name: string,
-  event_details: string,
+  event_description: string,
   event_img: string,
   event_category: string,
   event_price: int,
@@ -197,7 +196,7 @@ Response Value
     {
       event_id: string,
       event_name: string,
-      event_details: string,
+      event_description: string,
       event_img: string,
       event_category: string,
       event_price: int, 
