@@ -51,7 +51,7 @@ Response Value
 
 | A | B |
 | ----------- | ------------- |
-| FETCH       | /sign-in  |
+| FETCH       | /login  |
 | METHOD      | POST |
 | Description | Endpoint used for login account |
 
