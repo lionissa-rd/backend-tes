@@ -31,10 +31,10 @@
 Request Body
 ```
 {
-  email: string,
-  password: string (minimum length 6),
-  first_name: string,
-  last_name: string,
+  userEmail: string,
+  userPassword: string (minimum length 6),
+  userFirstName: string,
+  userLastName: string,
 }
 ```
 
@@ -58,8 +58,8 @@ Response Value
 Request Body
 ```
 {
-  email: string,
-  password: string,
+  userEmail: string,
+  userPassword: string,
 }
 ```
 
@@ -541,7 +541,7 @@ Response Value
 
 Request Body
 ```
-None. Put forum_id in the :id.
+None. (Put forum_id in the :id).
 ```
 
 Response Value
@@ -626,7 +626,7 @@ Response Value
 
 Request Body
 ```
-None. Put forum_id in :id
+None. (Put forum_id in :id)
 ```
 
 Response Value
@@ -699,7 +699,7 @@ Response Value
 
 Request Body
 ```
-None. Put fc_id in :id
+None. (Put fc_id in :id).
 ```
 
 Response Value
