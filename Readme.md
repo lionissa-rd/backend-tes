@@ -107,8 +107,6 @@ Response Value
     {
       user_email: string,
       user_creation_date: string,
-      inbox_id: string,
-      user_avatar: string,
       user_first_name: string,
       user_last_name: string,
       user_role: enum (Admin, User),
